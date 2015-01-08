@@ -1,0 +1,33 @@
+{
+  "name": "e2d3-server",
+  "version": "0.3.0",
+  "description": "E2D3 Server is E2D3 contents management system.",
+  "keywords": [
+    "E2D3"
+  ],
+  "dependencies": {
+    "body-parser": "^1.10.1",
+    "cookie-parser": "^1.3.3",
+    "express": "^4.10.7",
+    "http-proxy": "^1.8.1",
+    "morgan": "^1.5.1",
+    "serve-favicon": "^2.2.0"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.8.0",
+    "connect-livereload": "^0.5.2",
+    "gulp": "~3.8.9",
+    "gulp-chug": "^0.4.1",
+    "gulp-coffee": "~2.2.0",
+    "gulp-debug": "~1.0.1",
+    "gulp-develop-server": "^0.2.5",
+    "gulp-filter": "~1.0.2",
+    "gulp-if": "~1.2.5",
+    "gulp-plumber": "^0.6.6",
+    "gulp-util": "~3.0.1",
+    "rimraf": "~2.2.8",
+    "tiny-lr": "^0.1.4"
+  },
+  "author": "E2D3",
+  "license": "E2D3"
+}
