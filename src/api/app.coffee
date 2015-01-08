@@ -20,6 +20,6 @@ app.use express.static path.join __dirname, 'public'
 app.use '/apps', express.static path.join __dirname, '..', 'e2d3', 'dist'
 
 app.use '/api/users', require './routes/users'
-app.use '/github', require './routes/github'
+app.use '/files', require './routes/files'
 
 module.exports = app
