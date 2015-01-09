@@ -5,8 +5,6 @@ logger = require 'morgan'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 
-port = process.env.PORT or 3000
-
 app = express()
 
 app.use logger 'dev'

@@ -1,17 +1,16 @@
 express = require 'express'
 httpProxy = require 'http-proxy'
+mime = require 'mime-types'
 
 router = express.Router()
 proxy = httpProxy.createProxyServer {}
 
 proxy.on 'proxyRes', (proxyRes, req, res) ->
-  endsWith = (str, suffix) ->
-    str.indexOf(suffix, str.length - suffix.length) != -1
+  for own key of proxyRes.headers
+    if (key.indexOf 'x-') == 0
+      delete proxyRes.headers[key]
 
-  if endsWith req.url, '.js'
-    proxyRes.headers['content-type'] = 'application/javascript'
-  else if endsWith req.url, '.coffee'
-    proxyRes.headers['content-type'] = 'text/coffeescript'
+  proxyRes.headers['content-type'] = mime.lookup req.url
 
 router.get '/:user/:project/:revision/*:path', (req, res) ->
   user = req.param 'user'
