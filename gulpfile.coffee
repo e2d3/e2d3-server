@@ -26,7 +26,10 @@ gulp.task 'js', ['clean'], () ->
     .pipe coffee()
     .pipe gulp.dest 'dist'
 
-gulp.task 'build', ['js']
+gulp.task 'build', ['js'], () ->
+  gulp.src 'e2d3/gulpfile.coffee'
+    .pipe coffee()
+    .pipe chug tasks: ['build']
 
 gulp.task 'watch', ['build'], ->
   gulp.watch 'src/api/**/*', ['js']
