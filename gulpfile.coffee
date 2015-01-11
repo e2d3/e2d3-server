@@ -15,6 +15,8 @@ coffee = require 'gulp-coffee'
 
 isRelease = gutil.env.release?
 
+e2d3args = if isRelease then ['--release'] else []
+
 gulp.task 'clean', (cb) ->
   if isRelease
     rimraf 'dist', cb
@@ -27,9 +29,10 @@ gulp.task 'js', ['clean'], () ->
     .pipe gulp.dest 'dist'
 
 gulp.task 'build', ['js'], () ->
-  gulp.src 'e2d3/gulpfile.coffee'
-    .pipe coffee()
-    .pipe chug tasks: ['build']
+  if process.argv[2] == 'build'
+    gulp.src 'e2d3/gulpfile.coffee'
+      .pipe coffee()
+      .pipe chug tasks: ['build'], args: e2d3args
 
 gulp.task 'watch', ['build'], ->
   gulp.watch 'src/api/**/*', ['js']
@@ -39,7 +42,7 @@ gulp.task 'watch', ['build'], ->
 gulp.task 'run', ['watch'], () ->
   gulp.src 'e2d3/gulpfile.coffee'
     .pipe coffee()
-    .pipe chug tasks: ['watch']
+    .pipe chug tasks: ['watch'], args: e2d3args
 
   startExpress()
   startLivereload()
@@ -47,7 +50,7 @@ gulp.task 'run', ['watch'], () ->
 gulp.task 'default', ['build']
 
 startExpress = () ->
-  server.listen path: 'dist/dev.js'
+  server.listen path: 'server.js'
 
 lr = null
 startLivereload = () ->
