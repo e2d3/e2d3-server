@@ -15,6 +15,10 @@ router.get '/', (req, res) ->
     baseUrl: '/files/github/E2D3/e2d3-contrib/master/barchart-javascript'
     scriptType: 'js'
     dataType: 'csv'
+  ,
+    baseUrl: '/files/github/E2D3/e2d3-contrib/master/react-javascript'
+    scriptType: 'jsx'
+    dataType: 'csv'
   ]
 
 module.exports = router
