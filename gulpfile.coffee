@@ -10,6 +10,7 @@ filter = require 'gulp-filter'
 
 server = require 'gulp-develop-server'
 plumber = require 'gulp-plumber'
+sourcemaps = require 'gulp-sourcemaps'
 
 coffee = require 'gulp-coffee'
 
@@ -25,7 +26,10 @@ gulp.task 'clean', (cb) ->
 
 gulp.task 'js', ['clean'], () ->
   gulp.src 'src/api/**/*.coffee'
+    .pipe plumber()
+    .pipe sourcemaps.init()
     .pipe coffee()
+    .pipe sourcemaps.write()
     .pipe gulp.dest 'dist'
 
 gulp.task 'build', ['js'], () ->
