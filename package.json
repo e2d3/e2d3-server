@@ -1,6 +1,6 @@
 {
   "name": "e2d3-server",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "E2D3 Server is E2D3 contents management system.",
   "keywords": [
     "E2D3"
@@ -30,7 +30,10 @@
     "rimraf": "~2.2.8",
     "tiny-lr": "^0.1.4"
   },
-  "author": "E2D3",
+  "engines": {
+    "node": "~0.10.35"
+  },
+  "author": "E2D3 Project",
   "license": "E2D3",
   "scripts": {
     "build": "gulp --require coffee-script/register build --release",
