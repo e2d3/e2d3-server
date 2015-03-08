@@ -19,6 +19,22 @@ router.get '/', (req, res) ->
     baseUrl: '/files/github/E2D3/e2d3-contrib/master/react-javascript'
     scriptType: 'jsx'
     dataType: 'csv'
+  ,
+    baseUrl: '/files/github/E2D3/e2d3-contrib/master/dot-bar-chart'
+    scriptType: 'js'
+    dataType: 'csv'
+  ,
+    baseUrl: '/files/github/E2D3/e2d3-contrib/master/japan-color'
+    scriptType: 'js'
+    dataType: 'csv'
+  ,
+    baseUrl: '/files/github/E2D3/e2d3-contrib/master/sequences-sumburst'
+    scriptType: 'js'
+    dataType: 'csv'
+  ,
+    baseUrl: '/files/github/E2D3/e2d3-contrib/master/treemap'
+    scriptType: 'js'
+    dataType: 'csv'
   ]
 
 module.exports = router

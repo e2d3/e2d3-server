@@ -33,7 +33,7 @@ gulp.task 'js', ['clean'], () ->
     .pipe gulp.dest 'dist'
 
 gulp.task 'build', ['js'], () ->
-  if process.argv[2] == 'build'
+  if process.argv.indexOf('build') != -1
     gulp.src 'e2d3/gulpfile.coffee'
       .pipe coffee()
       .pipe chug tasks: ['build'], args: e2d3args
