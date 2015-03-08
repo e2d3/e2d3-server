@@ -31,7 +31,7 @@
     "tiny-lr": "^0.1.4"
   },
   "engines": {
-    "node": "~0.10.35"
+    "node": "~0.10.32"
   },
   "author": "E2D3 Project",
   "license": "E2D3",
