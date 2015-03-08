@@ -36,9 +36,8 @@
   "author": "E2D3 Project",
   "license": "E2D3",
   "scripts": {
-    "postinstall": "cd e2d3 && npm install",
+    "postinstall": "cd e2d3 && npm install && cd .. && gulp --require coffee-script/register build",
     "watch": "gulp --require coffee-script/register run",
-    "prestart": "gulp --require coffee-script/register build",
     "start": "node server.js"
   }
 }
