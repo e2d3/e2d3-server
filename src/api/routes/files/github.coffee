@@ -13,11 +13,6 @@ proxy.on 'proxyRes', (proxyRes, req, res) ->
   proxyRes.headers['content-type'] = mime.lookup req.url
 
 router.get '/:user/:project/:revision/*:path', (req, res) ->
-  user = req.param 'user'
-  project = req.param 'project'
-  revision = req.param 'revision'
-  path = req.param 'path'
-
   req.headers.host = 'raw.githubusercontent.com'
 
   delete req.headers['accept-encoding']

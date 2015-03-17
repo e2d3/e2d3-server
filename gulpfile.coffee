@@ -15,11 +15,13 @@ sourcemaps = require 'gulp-sourcemaps'
 coffee = require 'gulp-coffee'
 
 isRelease = gutil.env.release?
+isFirst = true
 
 e2d3args = if isRelease then ['--release'] else []
 
 gulp.task 'clean', (cb) ->
-  if isRelease
+  if isFirst
+    isFirst = false
     rimraf 'dist', cb
   else
     cb()

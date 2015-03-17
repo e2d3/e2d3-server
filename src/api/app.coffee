@@ -14,7 +14,7 @@ app.use cookieParser()
 
 app.use (require 'connect-livereload')() if process.env.NODE_ENV == 'development'
 
-app.use '/api/users', require './routes/users'
+app.use '/api', require './routes/api'
 app.use '/files', require './routes/files'
 
 app.use express.static path.join __dirname, '..', 'e2d3', 'dist'
