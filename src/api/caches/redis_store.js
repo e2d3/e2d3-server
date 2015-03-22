@@ -13,7 +13,8 @@ function redisStore(args) {
 
     var redisOptions = {
         host: args.host || '127.0.0.1',
-        port: args.port || 6379
+        port: args.port || 6379,
+        auth_pass: args.auth_pass
     };
 
     var pool = new RedisPool(redisOptions, {});
