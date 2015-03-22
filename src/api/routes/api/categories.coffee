@@ -37,7 +37,7 @@ router.get '/github/*:path', (req, res) ->
           promises[dir.name] = github.getFromCacheAsync dir.url
         else
           promises[dir.name] = github.getAsync dir.url
-        break
+
       Promise.props promises
     .then (result) ->
       charts = []
