@@ -2,7 +2,7 @@ fs = require 'fs'
 request = require 'request-json'
 Promise = require 'bluebird'
 
-cache = require './cache'
+cache = require '../caches'
 
 options = {}
 
@@ -26,21 +26,23 @@ class GithubJsonClient extends request.JsonClient
     @makeCachable 'get'
 
   getFromCache: (path, options, callback, parse) ->
-      if typeof options == 'function'
-        callback = options
+    if typeof options == 'function'
+      [options, callback, parse] = [{}, options, callback]
 
-      cache.get path, (err, result) =>
-        return callback err, null, null if err
+    cache.get path, (err, result) =>
+      return callback err, null, null if err
 
-        callback err, { headers: result.headers }, result.body
+      if result
+        return callback err, { headers: result.headers }, result.body
+
+      @get path, options, callback, parse
+
 
   makeCachable: (name) ->
     @[name] = (path, options, callback, parse) =>
       # normalize arguments
       if typeof options == 'function'
-        parse = callback
-        callback = options
-        options = {}
+        [options, callback, parse] = [{}, options, callback]
 
       # get etag and body from cache
       cache.get path, (err, result) =>
@@ -59,15 +61,15 @@ class GithubJsonClient extends request.JsonClient
           return originalCallback err, res, body if err
 
           if res.statusCode == 304
-            originalCallback err, res, cached.body
-          else
-            caching =
-              headers: res.headers
-              body: body
-            cache.set path, caching, {}, () ->
-              originalCallback err, res, body
+            return originalCallback err, res, cached.body
 
-        request.JsonClient.prototype[name].call @, path, options, callback, parse
+          caching =
+            headers: res.headers
+            body: body
+          cache.set path, caching, {}, () ->
+            originalCallback err, res, body
+
+        GithubJsonClient.prototype[name].call @, path, options, callback, parse
 
 github = Promise.promisifyAll new GithubJsonClient GITHUB_API_URL, options
 
