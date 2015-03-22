@@ -14,9 +14,9 @@ if process.env.PROXY_DEBUG
   options.proxy = 'http://localhost:8888'
   options.ca = fs.readFileSync('/Users/chimera/charles-ssl-proxying-certificate.crt')
 
-GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com/'
-ETAG_CACHE_PREFIX = 'etag:'
-TTL_CACHE_PREFIX = 'ttl:'
+GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com'
+ETAG_CACHE_PREFIX = 'github:etag:'
+TTL_CACHE_PREFIX = 'github:ttl:'
 
 class GithubJsonClient extends request.JsonClient
   constructor: (url, options) ->
@@ -27,13 +27,21 @@ class GithubJsonClient extends request.JsonClient
     @makeCachableUsingEtag 'get'
     @makeCachableUsingTTL 'get'
 
+    @hostMatch = new RegExp "^#{@host}"
+
     Promise.promisifyAll @
+
+  ###
+  # キャッシュキー生成
+  ###
+  createKey: (prefix, path) ->
+    prefix + path.replace @hostMatch, ''
 
   ###
   # 保存されているキャッシュからデータを取得
   ###
-  getFromCache: (path, options, callback, parse) ->
-    key = TTL_CACHE_PREFIX + path
+  getFromETagCache: (path, options, callback, parse) ->
+    key = @createKey ETAG_CACHE_PREFIX, path
 
     if typeof options == 'function'
       [options, callback, parse] = [{}, options, callback]
@@ -42,7 +50,7 @@ class GithubJsonClient extends request.JsonClient
       return callback err, null, null if err
 
       if result
-        return callback err, { headers: result.headers }, result.body
+        return callback err, result, result.body
 
       @get path, options, callback, parse
 
@@ -53,7 +61,7 @@ class GithubJsonClient extends request.JsonClient
     originalFunction = @[name]
 
     @[name] = (path, options, callback, parse) =>
-      key = ETAG_CACHE_PREFIX + path
+      key = @createKey ETAG_CACHE_PREFIX, path
 
       # normalize arguments
       if typeof options == 'function'
@@ -73,12 +81,11 @@ class GithubJsonClient extends request.JsonClient
         proxy = (err, res, body) ->
           return callback err, res, body if err
 
-          # console.log res.headers
-
           if res.statusCode == 304
             return callback err, res, cached.body
 
           caching =
+            statusCode: res.statusCode
             headers: res.headers
             body: body
           cache.set key, caching, {}, () ->
@@ -90,7 +97,7 @@ class GithubJsonClient extends request.JsonClient
     originalFunction = @[name]
 
     @[name] = (path, options, callback, parse) =>
-      key = TTL_CACHE_PREFIX + path
+      key = @createKey TTL_CACHE_PREFIX, path
 
       # normalize arguments
       if typeof options == 'function'
@@ -100,13 +107,14 @@ class GithubJsonClient extends request.JsonClient
         return callback err, null, null if err
 
         if result
-          return callback err, { headers: result.headers }, result.body
+          return callback err, result, result.body
 
         # override callback
         proxy = (err, res, body) ->
           return callback err, res, body if err
 
           caching =
+            statusCode: res.statusCode
             headers: res.headers
             body: body
           cacheOptions =
