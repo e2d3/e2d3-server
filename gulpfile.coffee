@@ -4,6 +4,7 @@ debug = require 'gulp-debug'
 chug = require 'gulp-chug'
 
 del = require 'del'
+merge = require 'merge2'
 
 cond = require 'gulp-if'
 filter = require 'gulp-filter'
@@ -27,11 +28,14 @@ gulp.task 'clean', (cb) ->
     cb()
 
 gulp.task 'js', ['clean'], () ->
-  gulp.src 'src/api/**/*.coffee'
-    .pipe plumber()
-    .pipe sourcemaps.init()
-    .pipe coffee()
-    .pipe sourcemaps.write()
+  merge(
+    gulp.src 'src/api/**/*.js'
+    gulp.src 'src/api/**/*.coffee'
+      .pipe plumber()
+      .pipe sourcemaps.init()
+      .pipe coffee()
+      .pipe sourcemaps.write()
+    )
     .pipe gulp.dest 'dist'
 
 gulp.task 'build', ['js'], () ->
