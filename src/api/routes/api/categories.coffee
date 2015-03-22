@@ -1,11 +1,7 @@
 express = require 'express'
-request = require 'request-json'
 Promise = require 'bluebird'
 
-github = Promise.promisifyAll request.createClient 'https://api.github.com/',
-  qs:
-    client_id: 'b83c999af546ee06597e'
-    client_secret: 'a3989b980d6ed1597a988784b0a256b99d1b1732'
+github = require '../../adapters/github'
 
 router = express.Router()
 
@@ -36,6 +32,7 @@ router.get '/github/*:path', (req, res) ->
       promises = {}
       for dir in body
         promises[dir.name] = github.getAsync dir.url
+        break
       Promise.props promises
     .then (result) ->
       charts = []
