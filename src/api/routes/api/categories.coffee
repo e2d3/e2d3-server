@@ -29,9 +29,14 @@ router.get '/github/*:path', (req, res) ->
 
   github.getAsync "repos/#{path}/contents"
     .spread (apires, body) ->
+      useCache = apires.statusCode == 304
+
       promises = {}
       for dir in body
-        promises[dir.name] = github.getAsync dir.url
+        if useCache
+          promises[dir.name] = github.getFromCacheAsync dir.url
+        else
+          promises[dir.name] = github.getAsync dir.url
         break
       Promise.props promises
     .then (result) ->
