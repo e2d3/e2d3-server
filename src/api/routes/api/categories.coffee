@@ -27,14 +27,14 @@ createData = (path, name, children) ->
 router.get '/github/*:path', (req, res) ->
   path = req.path.replace /^\/github\//, ''
 
-  github.getAsync "repos/#{path}/contents"
+  github.getAsync "/repos/#{path}/contents"
     .spread (apires, body) ->
       useCache = apires.statusCode == 304
 
       promises = {}
       for dir in body
         if useCache
-          promises[dir.name] = github.getFromCacheAsync dir.url
+          promises[dir.name] = github.getFromETagCacheAsync dir.url
         else
           promises[dir.name] = github.getAsync dir.url
 
