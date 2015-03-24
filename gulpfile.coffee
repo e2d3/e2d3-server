@@ -3,7 +3,7 @@ gutil = require 'gulp-util'
 debug = require 'gulp-debug'
 chug = require 'gulp-chug'
 
-del = require 'del'
+rimraf = require 'rimraf'
 merge = require 'merge2'
 
 cond = require 'gulp-if'
@@ -23,7 +23,7 @@ e2d3args = if isRelease then ['--release'] else []
 gulp.task 'clean', (cb) ->
   if isFirst
     isFirst = false
-    del ['dist/**/*'], cb
+    rimraf 'dist', cb
   else
     cb()
 
