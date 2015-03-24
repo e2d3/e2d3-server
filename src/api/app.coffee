@@ -14,6 +14,17 @@ app.use cookieParser()
 
 app.use (require 'connect-livereload')() if process.env.NODE_ENV == 'development'
 
+options =
+  host: process.env.REDIS_HOST ? '127.0.0.1'
+  port: process.env.REDIS_PORT ? 6379
+  auth_pass: process.env.REDIS_AUTH_PASS
+
+Cacher = require 'cacher'
+CacherRedis = require 'cacher-redis'
+cacher = new Cacher new CacherRedis options.port, options.host, options
+
+app.use '/files', cacher.cache 'minutes', 10
+
 app.use '/api', require './routes/api'
 app.use '/files', require './routes/files'
 
