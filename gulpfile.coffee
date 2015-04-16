@@ -28,31 +28,33 @@ gulp.task 'clean', (cb) ->
     cb()
 
 gulp.task 'js', ['clean'], () ->
-  merge(
-    gulp.src 'src/api/**/*.js'
-    gulp.src 'src/api/**/*.coffee'
-      .pipe plumber()
-      .pipe sourcemaps.init()
-      .pipe coffee()
-      .pipe sourcemaps.write()
-    )
+  gulp.src 'src/api/**/*.js'
     .pipe gulp.dest 'dist'
 
-gulp.task 'build', ['js'], () ->
+gulp.task 'coffee', ['clean'], () ->
+  gulp.src 'src/api/**/*.coffee'
+    .pipe plumber()
+    .pipe sourcemaps.init()
+    .pipe coffee()
+    .pipe sourcemaps.write()
+    .pipe gulp.dest 'dist'
+
+gulp.task 'scripts', ['js', 'coffee']
+
+gulp.task 'build', ['scripts'], () ->
   if process.argv.indexOf('build') != -1
     gulp.src 'e2d3/gulpfile.coffee'
       .pipe coffee()
       .pipe chug tasks: ['build'], args: e2d3args
 
 gulp.task 'watch', ['build'], ->
-  gulp.watch 'src/api/**/*', ['js']
-  gulp.watch 'dist/**/*', notifyLivereload
-  gulp.watch 'e2d3/dist/**/*', notifyLivereload
+  gulp.watch 'src/api/**/*', ['scripts']
+  gulp.watch ['dist/**/*', 'e2d3/dist/**/*', 'server.js'], notifyLivereload
 
 gulp.task 'run', ['watch'], () ->
   gulp.src 'e2d3/gulpfile.coffee'
     .pipe coffee()
-    .pipe chug tasks: ['watch'], args: e2d3args
+    .pipe chug tasks: ['watch-server'], args: e2d3args
 
   startExpress()
   startLivereload()
