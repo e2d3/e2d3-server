@@ -18,26 +18,26 @@ createData = (path, name, children) ->
 
   ret =
     title: "#{path}/#{name}"
-    baseUrl: "/files/github/#{path}/master/#{name}"
+    baseUrl: "/files/github/#{path}/contents/#{name}"
     scriptType: scriptType
     dataType: dataType
 
   ret
 
-router.get '/github/*:path', (req, res) ->
-  path = req.path.replace /^\/github\//, ''
+router.get '/github/*', (req, res) ->
+  path = req.params[0]
 
   github.getAsync "/repos/#{path}/contents"
     .spread (apires, body) ->
-      useCache = apires.statusCode == 304
-
       promises = {}
-      for dir in body
-        if useCache
-          promises[dir.name] = github.getFromETagCacheAsync dir.url
-        else
+      if apires.statusCode == 200
+        for dir in body
           promises[dir.name] = github.getAsync dir.url
-
+      else if apires.statusCode == 304
+        # ディレクトリ取得APIの結果が変更無しであれば、
+        # 子供も変更がないので保存されているキャッシュから取得する
+        for dir in body
+          promises[dir.name] = github.getFromETagCacheAsync dir.url
       Promise.props promises
     .then (result) ->
       charts = []
@@ -47,7 +47,6 @@ router.get '/github/*:path', (req, res) ->
       res.json charts: charts
       undefined
     .catch (err) ->
-      console.log err
       res.status(500).json err
 
 module.exports = router

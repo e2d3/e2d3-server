@@ -23,6 +23,7 @@ Cacher = require 'cacher'
 CacherRedis = require 'cacher-redis'
 cacher = new Cacher new CacherRedis options.port, options.host, options
 
+app.use '/api', cacher.cache 'minutes', 1
 app.use '/files', cacher.cache 'minutes', 10
 
 app.use '/api', require './routes/api'

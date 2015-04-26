@@ -15,9 +15,15 @@ if process.env.PROXY_DEBUG
   options.ca = fs.readFileSync('/Users/chimera/charles-ssl-proxying-certificate.crt')
 
 GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com'
-ETAG_CACHE_PREFIX = 'github:etag:'
-TTL_CACHE_PREFIX = 'github:ttl:'
+ETAG_CACHE_PREFIX = 'github:'
 
+###
+# Github API用クライアント
+#
+# APIアクセス制限を回避するためにETagでの変更検出を行う
+# 以前は一定期間の無条件のキャッシュも行っていたが、
+# それはフロントで行うようにした (app.coffee参照)
+###
 class GithubJsonClient extends request.JsonClient
   constructor: (url, options) ->
     super url, options
@@ -25,7 +31,6 @@ class GithubJsonClient extends request.JsonClient
     @headers['user-agent'] = 'E2D3/0.4.0'
 
     @makeCachableUsingEtag 'get'
-    @makeCachableUsingTTL 'get'
 
     @hostMatch = new RegExp "^#{@host}"
 
@@ -81,8 +86,13 @@ class GithubJsonClient extends request.JsonClient
         proxy = (err, res, body) ->
           return callback err, res, body if err
 
+          # if not modified
           if res.statusCode == 304
             return callback err, res, cached.body
+
+          # if not ok
+          if res.statusCode != 200
+            return callback err, res, body
 
           caching =
             statusCode: res.statusCode
@@ -92,38 +102,6 @@ class GithubJsonClient extends request.JsonClient
             callback err, res, body
 
         originalFunction.call @, path, options, proxy, parse
-
-  makeCachableUsingTTL: (name) ->
-    originalFunction = @[name]
-
-    @[name] = (path, options, callback, parse) =>
-      key = @createKey TTL_CACHE_PREFIX, path
-
-      # normalize arguments
-      if typeof options == 'function'
-        [options, callback, parse] = [{}, options, callback]
-
-      cache.get key, (err, result) =>
-        return callback err, null, null if err
-
-        if result
-          return callback err, result, result.body
-
-        # override callback
-        proxy = (err, res, body) ->
-          return callback err, res, body if err
-
-          caching =
-            statusCode: res.statusCode
-            headers: res.headers
-            body: body
-          cacheOptions =
-            ttl: 60
-          cache.set key, caching, cacheOptions, (err) ->
-            callback err, res, body
-
-        originalFunction.call @, path, options, proxy, parse
-
 
 github = new GithubJsonClient GITHUB_API_URL, options
 
