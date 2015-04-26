@@ -28,8 +28,8 @@ app.use '/files', cacher.cache 'minutes', 10
 app.use '/api', require './routes/api'
 app.use '/files', require './routes/files'
 
-app.get '/App/*', (req, res) ->
-  res.redirect '/'
+# DEPRECATED
+app.use '/App', express.static path.join __dirname, '..', 'e2d3', 'dist'
 
 app.use express.static path.join __dirname, '..', 'e2d3', 'dist'
 
