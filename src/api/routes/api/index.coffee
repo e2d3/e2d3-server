@@ -12,4 +12,13 @@ for file in files
   continue if modulename == 'index'
   router.use '/' + modulename, require './' + modulename
 
+e2d3 = require '../../../e2d3/package.json'
+e2d3server = require '../../../package.json'
+
+router.get '/', (req, res) ->
+  res.json
+    versions:
+      'e2d3': e2d3.version
+      'e2d3-server': e2d3server.version
+
 module.exports = router
