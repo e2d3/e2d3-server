@@ -4,6 +4,8 @@ Promise = require 'bluebird'
 
 cache = require '../caches'
 
+e2d3server = require '../../package.json'
+
 options = {}
 
 options.qs =
@@ -28,7 +30,7 @@ class GithubJsonClient extends request.JsonClient
   constructor: (url, options) ->
     super url, options
 
-    @headers['user-agent'] = 'E2D3/0.4.0'
+    @headers['user-agent'] = "E2D3/#{e2d3server.version}"
 
     @makeCachableUsingEtag 'get'
 
