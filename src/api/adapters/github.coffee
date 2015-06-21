@@ -4,7 +4,7 @@ Promise = require 'bluebird'
 
 cache = require '../caches'
 
-e2d3server = require '../../package.json'
+e2d3server = require '../../../package.json'
 
 options = {}
 

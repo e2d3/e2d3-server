@@ -1,7 +1,6 @@
 cacheManager = require 'cache-manager'
 redisStore = require './redis_store'
 
-#cache = cacheManager.caching store: 'memory', max: 200, ttl: 3600
 cache = cacheManager.caching
   store: redisStore,
   host: process.env.REDIS_HOST ? '127.0.0.1'
