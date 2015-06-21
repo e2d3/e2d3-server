@@ -3,7 +3,9 @@ path = require 'path'
 logger = require 'morgan'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
+cors = require 'cors'
 
+config = require '../config'
 cacher = require './front-cache'
 
 app = express()
@@ -12,6 +14,8 @@ app.use logger 'dev'
 app.use bodyParser.json()
 app.use bodyParser.urlencoded extended: false
 app.use cookieParser()
+
+app.use cors origin: config.corsOrigin
 
 app.use (require 'connect-livereload')() if process.env.NODE_ENV == 'development'
 
