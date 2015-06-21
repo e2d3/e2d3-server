@@ -12,8 +12,8 @@ for file in files
   continue if modulename == 'index'
   router.use '/' + modulename, require './' + modulename
 
-e2d3 = require '../../../e2d3/package.json'
-e2d3server = require '../../../package.json'
+e2d3 = require '../../../../e2d3/package.json'
+e2d3server = require '../../../../package.json'
 
 router.get '/', (req, res) ->
   res.json
