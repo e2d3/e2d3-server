@@ -3,12 +3,9 @@ vhost = require 'vhost'
 
 config = require './config'
 
-api = require './api'
-share = require './share'
-
 app = express()
 
-app.use(vhost(config.domainApi, api))
-app.use(vhost(config.domainShare, share))
+app.use(vhost(config.domainApi, (require './api')))
+app.use(vhost(config.domainShare, (require './share')))
 
 module.exports = app
