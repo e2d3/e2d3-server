@@ -34,7 +34,6 @@
     "gulp-sourcemaps": "~1.5.2",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "~3.0.6",
-    "isarray": "0.0.1",
     "jade": "^1.11.0",
     "main-bower-files": "~2.8.2",
     "merge2": "~0.3.6",
