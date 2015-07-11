@@ -5,6 +5,8 @@ config =
       domainShare: 's.d.e2d3.org'
       fileBase: 'http://a.d.e2d3.org:8000/files'
       corsOrigin: 'http://s.d.e2d3.org:8000'
+      databaseType: 'mongodb'
+      databaseUrl: 'mongodb://localhost/e2d3'
     when 'staging'
       domainApi: 'a.s.e2d3.org'
       domainShare: 's.s.e2d3.org'
