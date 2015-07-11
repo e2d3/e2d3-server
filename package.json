@@ -5,6 +5,7 @@
   "keywords": [
     "E2D3"
   ],
+  "repository": "e2d3/e2d3-server",
   "dependencies": {
     "amd-optimize": "~0.4.4",
     "bluebird": "~2.9.30",
@@ -43,11 +44,12 @@
     "serve-favicon": "~2.3.0",
     "sol-redis-pool": "~0.2.0",
     "tiny-lr": "~0.1.6",
+    "universal-analytics": "^0.3.8",
     "vhost": "~3.0.0"
   },
   "devDependencies": {},
   "engines": {
-    "node": "~0.12.3"
+    "node": "~0.12.0"
   },
   "author": "E2D3 Project",
   "license": "E2D3",
