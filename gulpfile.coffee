@@ -15,6 +15,8 @@ sourcemaps = require 'gulp-sourcemaps'
 
 coffee = require 'gulp-coffee'
 
+mocha = require 'gulp-mocha'
+
 isRelease = gutil.env.release?
 isFirst = true
 
@@ -51,8 +53,14 @@ gulp.task 'build', ['scripts'], () ->
       .pipe coffee()
       .pipe chug tasks: ['build'], args: e2d3args
 
-gulp.task 'watch', ['build'], ->
-  gulp.watch 'src/**/*', ['scripts']
+gulp.task 'test', ['build'], () ->
+  gulp.src 'test/**/*.coffee', read: false
+    .pipe mocha()
+    .once 'error', () ->
+      process.exit 1
+
+gulp.task 'watch', ['test'], ->
+  gulp.watch ['src/**/*', 'test/**/*'], ['test']
   gulp.watch ['dist/**/*', 'e2d3/dist/**/*', 'server.js'], notifyLivereload
 
 gulp.task 'run', ['watch'], () ->

@@ -21,4 +21,7 @@ config =
       dataBase: 'https://d.e2d3.org/data'
       corsOrigin: 'https://s.e2d3.org'
 
+config.isInTest = typeof global.it == 'function'
+config.databaseType = 'mockdb' if config.isInTest
+
 module.exports = config
