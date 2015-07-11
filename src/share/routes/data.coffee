@@ -1,12 +1,12 @@
 express = require 'express'
 
 db = require '../../common/db'
-datacollection = require '../../common/db/collection/data'
+data = require '../../common/db/collection/data'
 
 router = express.Router()
 
 router.get '/:id', (req, res) ->
-  datacollection.get req.params.id
+  data.get req.params.id
     .then (tsv) ->
       res
         .header 'content-type', 'text/plain'

@@ -3,20 +3,25 @@ Promise = require 'bluebird'
 
 db = require '../index'
 
-data = db.collection 'data'
+charts = db.collection 'charts'
 
 get = (id) ->
-  data.get id
+  charts.get id
     .then (item) ->
       throw new db.NotFoundError(id) if !item?
-      Promise.resolve item.data
+      Promise.resolve item
 
-put = (tsv) ->
+put = (params) ->
   sha256 = crypto.createHash 'sha256'
-  sha256.update tsv
+  sha256.update params.type + ':' + params.path + '#' + params.revision
   id = sha256.digest 'hex'
 
-  data.put id, data: tsv
+  doc =
+    path: params.path
+    revision: params.revision
+    type: params.type
+
+  charts.put id, doc
     .then () ->
       Promise.resolve id
 
