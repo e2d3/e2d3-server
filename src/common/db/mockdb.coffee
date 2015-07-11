@@ -6,24 +6,26 @@ Promise = require 'bluebird'
 
 class MockDBClient
   constructor: () ->
-
-  collection: (name) ->
-    new MockDBCollection name
-
-class MockDBCollection
-  constructor: (name) ->
-    @col = name
     @data = {}
 
+  collection: (name) ->
+    new MockDBCollection @data, name
+
+  clear: () ->
+    Promise.try () ->
+      @data = {}
+      @data
+
+class MockDBCollection
+  constructor: (data, name) ->
+    @data = data
+    @col = name
+
   get: (id) ->
-    new Promise (resolve, reject) =>
-      if @data[id]?
-        resolve @data[id]
-      else
-        reject 'notfound'
+    Promise.resolve @data[id]
 
   put: (id, doc) ->
     @data[id] = doc
-    Promise.resolve 'success'
+    Promise.resolve doc
 
 module.exports = new MockDBClient
