@@ -11,9 +11,9 @@ app.use logger 'dev'
 
 app.use (require 'connect-livereload')() if process.env.NODE_ENV == 'development'
 
-app.use '/s', require './share'
-app.use '/l', express.static path.join __dirname, '..', '..', 'e2d3', 'dist', 'lib'
+app.use '/libs', express.static path.join __dirname, '..', '..', 'e2d3', 'dist', 'lib'
 
-app.use '/d', require './routes/data'
+app.use '/data', require './routes/data'
+app.get '/:chart/:data', require './routes/shares'
 
 module.exports = app
