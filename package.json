@@ -20,7 +20,6 @@
     "connect-livereload": "~0.5.3",
     "cookie-parser": "~1.3.5",
     "cors": "~2.7.1",
-    "documentdb": "~1.1.0",
     "express": "~4.13.1",
     "gulp": "~3.9.0",
     "gulp-chug": "alansouzati/gulp-chug.git#5367c9c",
@@ -37,10 +36,11 @@
     "gulp-plumber": "~1.0.1",
     "gulp-sass": "~2.0.3",
     "gulp-sourcemaps": "~1.5.2",
-    "gulp-uglify": "^1.2.0",
+    "gulp-uglify": "~1.2.0",
     "gulp-util": "~3.0.6",
-    "jade": "^1.11.0",
-    "lodash": "^3.10.0",
+    "jade": "~1.11.0",
+    "latest-version": "~1.0.1",
+    "lodash": "~3.10.0",
     "main-bower-files": "~2.9.0",
     "merge2": "~0.3.6",
     "mongodb": "~2.0.36",
@@ -50,7 +50,8 @@
     "serve-favicon": "~2.3.0",
     "sol-redis-pool": "~0.2.0",
     "tiny-lr": "~0.1.6",
-    "vhost": "~3.0.0"
+    "vhost": "~3.0.0",
+    "vinyl-fs": "~1.0.0"
   },
   "devDependencies": {},
   "engines": {
