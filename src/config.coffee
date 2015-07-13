@@ -26,7 +26,7 @@ config =
       domainApi: 'a.e2d3.org'
       domainShare: 's.e2d3.org'
       fileBase: 'https://a.e2d3.org/files'
-      dataBase: 'https://d.e2d3.org/data'
+      dataBase: 'https://s.e2d3.org/data'
       corsOrigin: 'https://s.e2d3.org'
       databaseType: 'mockdb'
 
