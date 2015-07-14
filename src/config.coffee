@@ -5,6 +5,7 @@ config =
       domainShare: 'sd.e2d3.org'
       fileBase: 'http://ad.e2d3.org:8000/files'
       dataBase: 'http://sd.e2d3.org:8000/data'
+      shareBase: 'http://sd.e2d3.org:8000'
       corsOrigin: 'http://sd.e2d3.org:8000'
       databaseType: 'mongodb'
       databaseUrl: 'mongodb://localhost/e2d3'
@@ -13,6 +14,7 @@ config =
       domainShare: 'st.e2d3.org'
       fileBase: 'http://at.e2d3.org/files'
       dataBase: 'http://st.e2d3.org/data'
+      shareBase: 'http://st.e2d3.org'
       corsOrigin: 'http://st.e2d3.org'
       databaseType: 'mockdb'
     when 'staging'
@@ -20,6 +22,7 @@ config =
       domainShare: 'ss.e2d3.org'
       fileBase: 'http://as.e2d3.org/files'
       dataBase: 'http://ss.e2d3.org/data'
+      shareBase: 'http://ss.e2d3.org'
       corsOrigin: 'http://ss.e2d3.org'
       databaseType: 'mockdb'
     else
@@ -27,6 +30,7 @@ config =
       domainShare: 's.e2d3.org'
       fileBase: 'https://a.e2d3.org/files'
       dataBase: 'https://s.e2d3.org/data'
+      shareBase: 'https://s.e2d3.org'
       corsOrigin: 'https://s.e2d3.org'
       databaseType: 'mockdb'
 

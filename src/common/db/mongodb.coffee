@@ -26,7 +26,7 @@ class MongoDBCollection
   get: (id) ->
     connect()
       .then (db) =>
-        db.collection(@col).findOne _id: id
+        db.collection(@col).findOne _id: $regex: new RegExp("^#{id}")
 
   put: (id, doc) ->
     connect()
