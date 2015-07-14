@@ -23,6 +23,9 @@ describe 'data', () ->
     it 'should throw NotFoundError if not found', () ->
       data.get('unknown').should.be.rejectedWith db.NotFoundError
 
+    it 'should work with abbreviated id', () ->
+      data.get(HASH_FOO[0...7]).should.become 'foo'
+
   describe '#put()', ->
     it 'should return id', () ->
       data.put('bar').should.become HASH_BAR

@@ -29,6 +29,12 @@ describe 'chart', () ->
     it 'should throw NotFoundError if not found', () ->
       charts.get('unknown').should.be.rejectedWith db.NotFoundError
 
+    it 'should work with abbreviated id', () ->
+      charts.get(HASH_FOO[0...32]).should.become
+        path: 'foo'
+        revision: '0000000'
+        type: 'js'
+
   describe '#put()', ->
     it 'should return id', () ->
       charts.put(path: 'bar', revision: '0000000', type: 'js').should.become HASH_BAR

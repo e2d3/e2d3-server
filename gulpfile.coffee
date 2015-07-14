@@ -55,9 +55,11 @@ gulp.task 'build', ['scripts'], () ->
 
 gulp.task 'test', ['build'], () ->
   gulp.src 'test/**/*.coffee', read: false
+    .pipe plumber()
     .pipe mocha()
-    .once 'error', () ->
-      process.exit 1
+    .once 'error', (e) ->
+      if e.domainEmitter?
+        process.exit 1
 
 gulp.task 'watch', ['test'], ->
   gulp.watch ['src/**/*', 'test/**/*'], ['test']

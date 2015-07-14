@@ -22,7 +22,13 @@ class MockDBCollection
     @col = name
 
   get: (id) ->
-    Promise.resolve @data[id]
+    re = new RegExp("^#{id}")
+    ret = null
+    for own key, value of @data
+      if re.test key
+        ret = value
+        break
+    Promise.resolve ret
 
   put: (id, doc) ->
     @data[id] = doc
