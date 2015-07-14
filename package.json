@@ -8,6 +8,7 @@
   "repository": "e2d3/e2d3-server",
   "dependencies": {
     "amd-optimize": "~0.5.0",
+    "azure-storage": "^0.4.5",
     "bluebird": "~2.9.33",
     "body-parser": "~1.13.2",
     "bower": "~1.4.1",

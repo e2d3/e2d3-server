@@ -4,6 +4,7 @@ db =
   switch config.databaseType
     when 'mongodb' then require './mongodb'
     when 'documentdb' then require './documentdb'
+    when 'azurestorage' then require './azurestorage'
     else require './mockdb'
 
 db.NotFoundError = (key) -> @key = key

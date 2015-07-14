@@ -16,7 +16,7 @@ config =
       dataBase: 'http://st.e2d3.org/data'
       shareBase: 'http://st.e2d3.org'
       corsOrigin: 'http://st.e2d3.org'
-      databaseType: 'mockdb'
+      databaseType: 'azurestorage'
     when 'staging'
       domainApi: 'as.e2d3.org'
       domainShare: 'ss.e2d3.org'
@@ -24,7 +24,7 @@ config =
       dataBase: 'http://ss.e2d3.org/data'
       shareBase: 'http://ss.e2d3.org'
       corsOrigin: 'http://ss.e2d3.org'
-      databaseType: 'mockdb'
+      databaseType: 'azurestorage'
     else
       domainApi: 'a.e2d3.org'
       domainShare: 's.e2d3.org'
@@ -32,7 +32,7 @@ config =
       dataBase: 'https://s.e2d3.org/data'
       shareBase: 'https://s.e2d3.org'
       corsOrigin: 'https://s.e2d3.org'
-      databaseType: 'mockdb'
+      databaseType: 'azurestorage'
 
 config.isInTest = typeof global.it == 'function'
 config.databaseType = 'mockdb' if config.isInTest
