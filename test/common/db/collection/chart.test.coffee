@@ -1,5 +1,6 @@
 config = require '../../../../dist/config'
 
+common = require '../../../../dist/common'
 db = require '../../../../dist/common/db'
 charts = require '../../../../dist/common/db/collection/chart'
 
@@ -27,7 +28,7 @@ describe 'chart', () ->
         type: 'js'
 
     it 'should throw NotFoundError if not found', () ->
-      charts.get('unknown').should.be.rejectedWith db.NotFoundError
+      charts.get('unknown').should.be.rejectedWith common.NotFoundError
 
     it 'should work with abbreviated id', () ->
       charts.get(HASH_FOO[0...32]).should.become

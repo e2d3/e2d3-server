@@ -4,6 +4,8 @@
 
 Promise = require 'bluebird'
 
+common = require '../index'
+
 class MockDBClient
   constructor: () ->
     @data = {}
@@ -19,16 +21,18 @@ class MockDBClient
 class MockDBCollection
   constructor: (data, name) ->
     @data = data
-    @col = name
+    @name = name
 
   get: (id) ->
-    re = new RegExp("^#{id}")
-    ret = null
-    for own key, value of @data
-      if re.test key
-        ret = value
-        break
-    Promise.resolve ret
+    new Promise (resolve, reject) =>
+      re = new RegExp("^#{id}")
+      entity = null
+      for own key, value of @data
+        if re.test key
+          entity = value
+          break
+      throw new common.NotFoundError(@name, id) if !entity
+      resolve entity
 
   put: (id, doc) ->
     @data[id] = doc

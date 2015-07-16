@@ -1,5 +1,6 @@
 config = require '../../../../dist/config'
 
+common = require '../../../../dist/common'
 db = require '../../../../dist/common/db'
 data = require '../../../../dist/common/db/collection/data'
 
@@ -21,7 +22,7 @@ describe 'data', () ->
       data.get(HASH_FOO).should.become 'foo'
 
     it 'should throw NotFoundError if not found', () ->
-      data.get('unknown').should.be.rejectedWith db.NotFoundError
+      data.get('unknown').should.be.rejectedWith common.NotFoundError
 
     it 'should work with abbreviated id', () ->
       data.get(HASH_FOO[0...7]).should.become 'foo'

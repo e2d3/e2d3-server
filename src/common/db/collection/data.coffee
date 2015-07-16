@@ -8,7 +8,6 @@ data = db.collection 'data'
 get = (id) ->
   data.get id
     .then (item) ->
-      throw new db.NotFoundError(id) if !item?
       Promise.resolve item.data
 
 put = (tsv) ->
@@ -16,7 +15,7 @@ put = (tsv) ->
   sha256.update tsv
   id = sha256.digest 'hex'
 
-  data.put id, data: tsv
+  data.put id, data: tsv, type: 'tsv'
     .then () ->
       Promise.resolve id
 
