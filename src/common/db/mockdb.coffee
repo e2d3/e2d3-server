@@ -11,7 +11,8 @@ class MockDBClient
     @data = {}
 
   collection: (name) ->
-    new MockDBCollection @data, name
+    @data[name] = {} if !@data[name]
+    new MockDBCollection @data[name], name
 
   clear: () ->
     Promise.try () ->
