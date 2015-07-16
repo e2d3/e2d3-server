@@ -7,9 +7,6 @@ charts = db.collection 'charts'
 
 get = (id) ->
   charts.get id
-    .then (item) ->
-      throw new db.NotFoundError(id) if !item?
-      Promise.resolve item
 
 put = (params) ->
   sha256 = crypto.createHash 'sha256'

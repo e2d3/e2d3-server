@@ -1,6 +1,6 @@
 express = require 'express'
 
-db = require '../../common/db'
+common = require '../../common'
 data = require '../../common/db/collection/data'
 
 router = express.Router()
@@ -11,7 +11,7 @@ router.get '/:id', (req, res) ->
       res
         .header 'content-type', 'text/plain'
         .send tsv
-    .catch db.NotFoundError, (error) ->
+    .catch common.NotFoundError, (error) ->
       res.status(404).json
         code: 404
         detail: error
