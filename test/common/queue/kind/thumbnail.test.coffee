@@ -32,3 +32,14 @@ describe 'data', () ->
 
     it 'should throw NotAvailableError if queue is empty', () ->
       thumbnail.get().should.be.rejectedWith common.NotAvailableError
+
+  describe '#post()', ->
+    it 'should return passed data', () ->
+      thumbnail.post
+        path: 'foo'
+        revision: '0000000'
+        type: 'js'
+      .should.become
+        path: 'foo'
+        revision: '0000000'
+        type: 'js'

@@ -6,6 +6,8 @@ config = require '../../../config'
 charts = require '../../../common/db/collection/chart'
 data = require '../../../common/db/collection/data'
 
+thumbnail = require '../../../common/queue/kind/thumbnail'
+
 router = express.Router()
 
 router.post '/', (req, res) ->
@@ -18,9 +20,12 @@ router.post '/', (req, res) ->
   Promise.props promises
     .then (result) ->
       path = "#{result.chart[0...7]}/#{result.data[0...32]}"
-      res.json
+      chart =
         path: path
         url: "#{config.shareBase}/#{path}"
+      thumbnail.post chart
+    .then (chart) ->
+      res.json chart
     .catch (error) ->
       res.status(500).json
         code: 500
