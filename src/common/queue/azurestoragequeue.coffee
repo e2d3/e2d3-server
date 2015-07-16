@@ -33,7 +33,7 @@ class AzureStorageQueue
     new Promise (resolve, reject) =>
       queueService.createMessage @name, JSON.stringify(doc), (error, result) ->
         if !error
-          resolve result
+          resolve doc
         else
           reject error
 
