@@ -10,6 +10,7 @@ config =
       databaseType: 'mongodb'
       databaseUrl: 'mongodb://localhost/e2d3'
       queueType: 'azure'
+      storageType: 'azure'
     when 'testing'
       domainApi: 'at.e2d3.org'
       domainShare: 'st.e2d3.org'
@@ -19,6 +20,7 @@ config =
       corsOrigin: 'http://st.e2d3.org'
       databaseType: 'azure'
       queueType: 'azure'
+      storageType: 'azure'
     when 'staging'
       domainApi: 'as.e2d3.org'
       domainShare: 'ss.e2d3.org'
@@ -28,6 +30,7 @@ config =
       corsOrigin: 'http://ss.e2d3.org'
       databaseType: 'azure'
       queueType: 'azure'
+      storageType: 'azure'
     else
       domainApi: 'a.e2d3.org'
       domainShare: 's.e2d3.org'
@@ -37,9 +40,12 @@ config =
       corsOrigin: 'https://s.e2d3.org'
       databaseType: 'azure'
       queueType: 'azure'
+      storageType: 'azure'
 
 config.isInTest = typeof global.it == 'function'
-config.databaseType = 'mock' if config.isInTest
-config.queueType = 'mock' if config.isInTest
+if config.isInTest
+  config.databaseType = 'mock'
+  config.queueType = 'mock'
+  config.storageType = 'mock'
 
 module.exports = config

@@ -10,7 +10,7 @@ chai = require 'chai'
 chai.use require 'chai-as-promised'
 chai.should()
 
-describe 'data', () ->
+describe 'common.queue.kind.thumbnail', () ->
   beforeEach () ->
     queue.clear()
       .then () ->

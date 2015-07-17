@@ -2,6 +2,7 @@ azure = require 'azure-storage'
 
 tableService = azure.createTableService()
 queueService = azure.createQueueService()
+blobService = azure.createBlobService()
 
 
 createTable = (name) ->
@@ -18,7 +19,22 @@ createQueue = (name) ->
     else
       console.log "'#{name}': #{error}"
 
+createPrivateBlob = (name) ->
+  blobService.createContainerIfNotExists name, (error) ->
+    if !error
+      console.log "Blob '#{name}' created or exists."
+    else
+      console.log "'#{name}': #{error}"
+
+createPublicBlob = (name) ->
+  blobService.createContainerIfNotExists name, { publicAccessLevel : 'blob' }, (error) ->
+    if !error
+      console.log "Blob '#{name}' created or exists."
+    else
+      console.log "'#{name}': #{error}"
+
 
 createTable 'chart'
 createTable 'data'
 createQueue 'thumbnail'
+createPublicBlob 'thumbnail'

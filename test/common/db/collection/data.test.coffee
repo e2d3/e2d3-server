@@ -11,7 +11,7 @@ chai.should()
 HASH_FOO = '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae'
 HASH_BAR = 'fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9'
 
-describe 'data', () ->
+describe 'common.data.collection.data', () ->
   beforeEach () ->
     db.clear()
       .then () ->
