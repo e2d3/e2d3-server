@@ -12,7 +12,11 @@ module.exports = (req, res) ->
 
   Promise.props promises
     .then (result) ->
+      path = "#{req.params.chart}/#{req.params.data}"
       params =
+        title: "#{result.chart.path} - E2D3"
+        path: path
+        selfUrl: "#{config.shareBase}/#{path}"
         baseUrl: chartpath result.chart
         dataUrl: "#{config.dataBase}/#{req.params.data}"
         scriptType: result.chart.type
