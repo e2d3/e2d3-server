@@ -1,32 +1,39 @@
 webshot = require 'webshot'
 Promise = require 'bluebird'
+concat = require 'concat-stream'
 
 common = require '../common'
-thumbnail = require '../common/queue/kind/thumbnail'
+queue = require '../common/queue/kind/thumbnail'
+storage = require '../common/storage/container/thumbnail'
 
-takeScreenShot = (chart) ->
+takeScreenShot = (url) ->
   options =
     windowSize:
       width: 1200
       height: 630
     defaultWhiteBackground: true
+    streamType: 'png'
     timeout: 20 * 1000
     takeShotOnCallback: true
     errorIfStatusIsNot200: true
     zoomFactor: 2.0
 
   new Promise (resolve, reject) ->
-    webshot chart.url, 'thumbnail.png', options, (error) ->
+    webshot url, options, (error, stream) ->
       if !error
-        resolve 'success'
+        stream.pipe concat (buffer) ->
+          resolve buffer
       else
         reject error
 
 retrieveRequestAndTakeScreenShot = () ->
-  thumbnail.get()
+  queue.get()
     .then (message) ->
-      takeScreenShot message.value()
-        .then (result) ->
+      chart = message.value()
+      takeScreenShot chart.url
+        .then (buffer) ->
+          storage.put chart.path, buffer
+        .then () ->
           Promise.resolve message
     .then (message) ->
       message.delete()

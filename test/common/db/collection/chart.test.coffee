@@ -11,7 +11,7 @@ chai.should()
 HASH_FOO = 'ac42acf9bd26de2c8c6baee1947306870f8d199b8e2c8ad9974e7529df4f739b'
 HASH_BAR = 'e6650f6fef07220443d66b74a1d2e85399df1c45a6305e15928447e8d2f7580b'
 
-describe 'chart', () ->
+describe 'common.data.collection.chart', () ->
   beforeEach () ->
     db.clear()
       .then () ->
