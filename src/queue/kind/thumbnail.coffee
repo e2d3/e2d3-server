@@ -2,7 +2,7 @@ Promise = require 'bluebird'
 
 queue = require '../index'
 
-thumbnail = queue.kind 'thumbnail'
+thumbnail = queue.kind 'thumbnails'
 
 get = () ->
   thumbnail.get()
