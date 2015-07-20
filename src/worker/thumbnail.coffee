@@ -30,6 +30,7 @@ retrieveRequestAndTakeScreenShot = () ->
   queue.get()
     .then (message) ->
       chart = message.value()
+      console.log chart
       takeScreenShot chart.url
         .then (buffer) ->
           storage.put chart.path, buffer
