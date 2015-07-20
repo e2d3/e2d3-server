@@ -55,7 +55,8 @@
     "tiny-lr": "~0.1.6",
     "vhost": "~3.0.0",
     "vinyl-fs": "~1.0.0",
-    "webshot": "^0.16.0"
+    "webshot": "~0.16.0",
+    "winston": "~1.0.1"
   },
   "devDependencies": {},
   "engines": {
