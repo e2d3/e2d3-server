@@ -2,9 +2,30 @@ webshot = require 'webshot'
 Promise = require 'bluebird'
 concat = require 'concat-stream'
 
-common = require '../common'
-queue = require '../common/queue/kind/thumbnail'
-storage = require '../common/storage/container/thumbnail'
+error = require 'error'
+queue = require 'queue/kind/thumbnail'
+storage = require 'storage/container/thumbnail'
+
+retrieveRequestFromQueueAndTakeScreenShot = () ->
+  queue.get()
+    .then (message) ->
+      chart = message.value()
+      console.log chart
+      takeScreenShot chart.url
+        .then (buffer) ->
+          storage.put chart.path, buffer
+        .then () ->
+          Promise.resolve message
+    .then (message) ->
+      message.delete()
+    .then () ->
+      console.log 'succeeded & go next'
+      retrieveRequestFromQueueAndTakeScreenShot()
+      undefined
+    .catch error.NotAvailableError, (err) ->
+      console.log 'not available'
+    .catch (err) ->
+      console.log err
 
 takeScreenShot = (url) ->
   options =
@@ -19,32 +40,12 @@ takeScreenShot = (url) ->
     zoomFactor: 2.0
 
   new Promise (resolve, reject) ->
-    webshot url, options, (error, stream) ->
-      if !error
+    console.log options
+    webshot url, options, (err, stream) ->
+      if !err
         stream.pipe concat (buffer) ->
           resolve buffer
       else
-        reject error
+        reject err
 
-retrieveRequestAndTakeScreenShot = () ->
-  queue.get()
-    .then (message) ->
-      chart = message.value()
-      console.log chart
-      takeScreenShot chart.url
-        .then (buffer) ->
-          storage.put chart.path, buffer
-        .then () ->
-          Promise.resolve message
-    .then (message) ->
-      message.delete()
-    .then () ->
-      console.log 'succeeded & go next'
-      retrieveRequestAndTakeScreenShot()
-      undefined
-    .catch common.NotAvailableError, (error) ->
-      console.log 'not available'
-    .catch (error) ->
-      console.log error
-
-retrieveRequestAndTakeScreenShot()
+retrieveRequestFromQueueAndTakeScreenShot()
