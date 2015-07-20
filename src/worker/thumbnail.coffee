@@ -3,6 +3,7 @@ Promise = require 'bluebird'
 concat = require 'concat-stream'
 
 error = require 'error'
+logger = require 'logger'
 queue = require 'queue/kind/thumbnail'
 storage = require 'storage/container/thumbnail'
 
@@ -10,22 +11,24 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
   queue.get()
     .then (message) ->
       chart = message.value()
-      console.log chart
+      logger.info 'Take screenshot', chart
       takeScreenShot chart.url
         .then (buffer) ->
+          logger.info 'Upload screenshot to \'%s\'', chart.path
           storage.put chart.path, buffer
         .then () ->
           Promise.resolve message
     .then (message) ->
+      logger.info 'Remove message from queue', message
       message.delete()
     .then () ->
-      console.log 'succeeded & go next'
+      logger.info 'Succeeded & go next'
       retrieveRequestFromQueueAndTakeScreenShot()
       undefined
     .catch error.NotAvailableError, (err) ->
-      console.log 'not available'
+      logger.info 'Not available'
     .catch (err) ->
-      console.log err
+      logger.error err
 
 takeScreenShot = (url) ->
   options =
@@ -40,7 +43,6 @@ takeScreenShot = (url) ->
     zoomFactor: 2.0
 
   new Promise (resolve, reject) ->
-    console.log options
     webshot url, options, (err, stream) ->
       if !err
         stream.pipe concat (buffer) ->
