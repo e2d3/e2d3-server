@@ -2,7 +2,7 @@ Promise = require 'bluebird'
 
 storage = require '../index'
 
-thumbnail = storage.container 'thumbnail'
+thumbnail = storage.container 'thumbnails'
 
 put = (path, buffer) ->
   options =
