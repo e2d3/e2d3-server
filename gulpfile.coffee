@@ -56,7 +56,7 @@ gulp.task 'build', ['scripts'], () ->
 gulp.task 'test', ['build'], () ->
   gulp.src 'test/**/*.coffee', read: false
     .pipe plumber()
-    .pipe mocha()
+    .pipe mocha require: ['./test/init.js']
     .once 'error', (e) ->
       if e.domainEmitter?
         process.exit 1
