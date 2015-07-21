@@ -43,8 +43,8 @@ config =
       corsOrigin: 'http://sd.e2d3.org:8000'
       databaseType: 'mongodb'
       databaseUrl: 'mongodb://localhost/e2d3'
-      queueType: 'azure'
-      storageType: 'azure'
+      queueType: 'mock'
+      storageType: 'mock'
 
 config.isInTest = typeof global.it == 'function'
 if config.isInTest
