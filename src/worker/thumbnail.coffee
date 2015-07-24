@@ -41,6 +41,12 @@ takeScreenShot = (url) ->
     takeShotOnCallback: true
     errorIfStatusIsNot200: true
     zoomFactor: 2.0
+    onResourceReceived: (response) ->
+      if (/\/main.css$/.test response.url) && response.stage == 'end'
+        window.onmaincssload?()
+    onResourceError: (resourceError) ->
+      if (/\/main.css$/.test resourceError.url)
+        window.onmaincsserror?()
 
   new Promise (resolve, reject) ->
     webshot url, options, (err, stream) ->
