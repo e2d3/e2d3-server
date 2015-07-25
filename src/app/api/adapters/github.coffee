@@ -120,9 +120,7 @@ class GithubJsonClient extends request.JsonClient
         else if cached
           # return cached data immediately & reload data in background
           options.headers ?= {}
-          console.log options.headers
           options.headers['if-none-match'] = cached.headers.etag if cached.headers.etag
-          console.log options.headers
           [originalCallback, callback] = [callback, null]
           originalFunction.call @, path, options, loader
           setupCacheHeaders cached, checker

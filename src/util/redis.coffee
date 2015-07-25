@@ -4,7 +4,8 @@ Promise = require 'bluebird'
 
 host = process.env.REDIS_HOST ? '127.0.0.1'
 port = process.env.REDIS_PORT ? 6379
-options = {}
+options =
+  auth_pass: process.env.REDIS_AUTH_PASS ? null
 
 client = redis.createClient(port, host, options)
 
