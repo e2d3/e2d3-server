@@ -2,33 +2,30 @@ fs = require 'fs'
 request = require 'request-json'
 Promise = require 'bluebird'
 
+config = require 'config'
 logger = require 'logger'
 
 redis = require 'util/redis'
 
 e2d3server = require '../../../../package.json'
 
-options = {}
+clientOptions = {}
 
-options.qs =
+clientOptions.qs =
   client_id: 'b83c999af546ee06597e'
   client_secret: 'a3989b980d6ed1597a988784b0a256b99d1b1732'
 
 if process.env.PROXY_DEBUG
-  options.proxy = 'http://localhost:8888'
-  options.ca = fs.readFileSync('/Users/chimera/charles-ssl-proxying-certificate.crt')
+  clientOptions.proxy = 'http://localhost:8888'
+  clientOptions.ca = fs.readFileSync('/Users/chimera/charles-ssl-proxying-certificate.crt')
 
 GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com'
 ETAG_CACHE_PREFIX = 'github:'
 CHECK_CACHE_PREFIX = 'github-check:'
-CACHE_AGE = 60 * 1000
+CACHE_AGE = config.cacheAgeGitHub
 
 ###
 # Github API用クライアント
-#
-# APIアクセス制限を回避するためにETagでの変更検出を行う
-# 以前は一定期間の無条件のキャッシュも行っていたが、
-# それはフロントで行うようにした (app.coffee参照)
 ###
 class GithubJsonClient extends request.JsonClient
   constructor: (url, options) ->
@@ -85,19 +82,20 @@ class GithubJsonClient extends request.JsonClient
         checker = if result[1] then JSON.parse result[1] else null
         now = Date.now()
 
-        if cached
-          options.headers ?= {}
-          options.headers['if-none-match'] = cached.headers.etag
+        setupCacheHeaders = (cached, checker) ->
+          maxAge = Math.floor((checker?.lastChecked + CACHE_AGE - now) / 1000)
+          maxAge = 0 if maxAge < 0
+          cached.headers['cache-control'] = "max-age=#{maxAge}"
 
         # override callback
         loader = (err, res, body) ->
           # if error
           return callback? err, res, body if err
           # if not ok
-          return callback? err, res, body if res.statusCode != 200 && res.statusCode != 304
+          # return callback? err, res, body if res.statusCode != 200 && res.statusCode != 304
 
-          # if modified
-          if res.statusCode == 200
+          if res.statusCode != 304
+            # modified
             cached =
               statusCode: res.statusCode
               headers: res.headers
@@ -106,21 +104,30 @@ class GithubJsonClient extends request.JsonClient
               lastChecked: now
             redis.mset etagKey, JSON.stringify(cached), checkKey, JSON.stringify(checker), (err, reply) ->
               logger.warn err if err
-          else if res.statusCode == 304
+          else
+            # not modified
             checker =
               lastChecked: now
             redis.set checkKey, JSON.stringify(checker), (err, reply) ->
               logger.warn err if err
 
+          setupCacheHeaders cached, checker
           return callback? null, cached, cached.body
 
         if cached? && checker?.lastChecked? && now - checker.lastChecked < CACHE_AGE
+          setupCacheHeaders cached, checker
           return callback null, cached, cached.body
         else if cached
+          # return cached data immediately & reload data in background
+          options.headers ?= {}
+          console.log options.headers
+          options.headers['if-none-match'] = cached.headers.etag if cached.headers.etag
+          console.log options.headers
           [originalCallback, callback] = [callback, null]
           originalFunction.call @, path, options, loader
+          setupCacheHeaders cached, checker
           return originalCallback null, cached, cached.body
         else
           return originalFunction.call @, path, options, loader
 
-module.exports = new GithubJsonClient GITHUB_API_URL, options
+module.exports = new GithubJsonClient GITHUB_API_URL, clientOptions

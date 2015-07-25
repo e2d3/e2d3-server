@@ -24,7 +24,8 @@ class RedisDBCollection
 
   get: (id) ->
     new Promise (resolve, reject) =>
-      redis.hscan @name, '0', 'MATCH', "#{id}*", 'COUNT', '1', (err, reply) ->
+      # scan only 1000 keys
+      redis.hscan @name, '0', 'MATCH', "#{id}*", 'COUNT', '1000', (err, reply) ->
         return reject err if err
         resolve reply[1][0]
     .then (key) =>
