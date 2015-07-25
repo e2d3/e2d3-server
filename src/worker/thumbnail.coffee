@@ -29,12 +29,15 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
       logger.info 'Not available'
     .catch (err) ->
       logger.error err
+      process.exit 1
 
 takeScreenShot = (url) ->
   options =
     windowSize:
       width: 1200
       height: 630
+    phantomConfig:
+      'ignore-ssl-errors': 'true'
     defaultWhiteBackground: true
     streamType: 'png'
     timeout: 20 * 1000

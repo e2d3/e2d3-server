@@ -2,9 +2,11 @@ Promise = require 'bluebird'
 
 config = require 'config'
 error = require 'error'
-chartpath = require 'util/chartpath'
+logger = require 'logger'
+
 charts = require 'db/collection/chart'
 data = require 'db/collection/data'
+chartpath = require 'util/chartpath'
 
 module.exports = (req, res) ->
   promises =
@@ -17,7 +19,7 @@ module.exports = (req, res) ->
         title: "#{result.chart.path} - E2D3"
         path: path
         selfUrl: "#{config.shareBase}/#{path}"
-        baseUrl: chartpath result.chart
+        baseUrl: chartpath.decode result.chart.path
         dataUrl: "#{config.dataBase}/#{req.params.data}"
         scriptType: result.chart.type
         dataType: 'tsv'
@@ -27,6 +29,7 @@ module.exports = (req, res) ->
         code: 404
         detail: err
     .catch (err) ->
+      logger.error 'Error on send chart', err
       res.status(500).json
         code: 500
         detail: err
