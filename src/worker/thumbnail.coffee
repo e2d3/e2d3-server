@@ -27,6 +27,7 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
       undefined
     .catch error.NotAvailableError, (err) ->
       logger.info 'Not available'
+      process.exit 0
     .catch (err) ->
       logger.error err
       process.exit 1

@@ -42,6 +42,6 @@ class AzureStorageQueueMessage
     new Promise (resolve, reject) =>
       queueService.deleteMessage @name, @message.messageid, @message.popreceipt, (err, result) ->
         return reject err if err
-        resolve result
+        resolve @message.messagetext
 
 module.exports = new AzureStorageQueueClient

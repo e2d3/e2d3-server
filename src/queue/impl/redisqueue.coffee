@@ -24,7 +24,7 @@ class RedisQueue
 
   get: () ->
     new Promise (resolve, reject) =>
-      redis.rpop @name, (err, reply) ->
+      redis.lindex @name, -1, (err, reply) ->
         return reject err if err
         resolve reply
     .then (message) =>
@@ -46,6 +46,9 @@ class RedisQueueMessage
     JSON.parse @message
 
   delete: () ->
-    Promise.resolve()
+    new Promise (resolve, reject) =>
+      redis.rpop @name, (err, reply) ->
+        return reject err if err
+        resolve reply
 
 module.exports = new RedisQueueClient
