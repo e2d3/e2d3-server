@@ -15,9 +15,8 @@ class MockDBClient
     new MockDBCollection @data[name], name
 
   clear: () ->
-    Promise.try () ->
-      @data = {}
-      @data
+    @data = {}
+    Promise.resolve @data
 
 class MockDBCollection
   constructor: (data, name) ->

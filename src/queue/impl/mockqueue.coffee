@@ -15,9 +15,8 @@ class MockQueueClient
     new MockQueue @data[name], name
 
   clear: () ->
-    Promise.try () ->
-      @data = {}
-      @data
+    @data = {}
+    Promise.resolve @data
 
 class MockQueue
   constructor: (data, name) ->
