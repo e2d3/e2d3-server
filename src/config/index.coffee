@@ -43,7 +43,7 @@ config =
       corsOrigin: 'http://sd.e2d3.org:8000'
       databaseType: 'redis'
       queueType: 'redis'
-      storageType: 'mock'
+      storageType: 'redis'
 
 config.isInTest = typeof global.it == 'function'
 if config.isInTest
