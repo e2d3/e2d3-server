@@ -45,6 +45,8 @@ config =
       queueType: 'redis'
       storageType: 'redis'
 
+config.cacheAgeGitHub = 3 * 60 * 1000 # 3 min
+
 config.isInTest = typeof global.it == 'function'
 if config.isInTest
   config.databaseType = 'mock'
