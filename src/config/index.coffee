@@ -41,9 +41,8 @@ config =
       dataBase: 'http://sd.e2d3.org:8000/data'
       shareBase: 'http://sd.e2d3.org:8000'
       corsOrigin: 'http://sd.e2d3.org:8000'
-      databaseType: 'mongodb'
-      databaseUrl: 'mongodb://localhost/e2d3'
-      queueType: 'mock'
+      databaseType: 'redis'
+      queueType: 'redis'
       storageType: 'mock'
 
 config.isInTest = typeof global.it == 'function'

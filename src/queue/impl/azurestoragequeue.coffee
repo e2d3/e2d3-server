@@ -1,5 +1,4 @@
 azure = require 'azure-storage'
-_ = require 'lodash'
 Promise = require 'bluebird'
 
 config = require 'config'
@@ -27,7 +26,6 @@ class AzureStorageQueue
     .then (message) =>
       throw new error.NotAvailableError(@name) if !message.message
       Promise.resolve message
-
 
   post: (doc) ->
     new Promise (resolve, reject) =>
