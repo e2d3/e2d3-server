@@ -53,10 +53,9 @@ takeScreenShot = (url) ->
 
   new Promise (resolve, reject) ->
     webshot url, options, (err, stream) ->
-      if !err
-        stream.pipe concat (buffer) ->
-          resolve buffer
-      else
-        reject err
+      return reject err if err
+      options = encoding: 'buffer'
+      stream.pipe concat options, (buffer) ->
+        resolve buffer
 
 retrieveRequestFromQueueAndTakeScreenShot()

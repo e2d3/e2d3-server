@@ -1,5 +1,4 @@
 azure = require 'azure-storage'
-_ = require 'lodash'
 Promise = require 'bluebird'
 
 config = require 'config'
@@ -10,18 +9,16 @@ class AzureStorageBlobClient
   constructor: () ->
 
   container: (name) ->
-    new AzureStorageBlobCollection name
+    new AzureStorageBlobContainer name
 
-class AzureStorageBlobCollection
+class AzureStorageBlobContainer
   constructor: (name) ->
     @name = name
 
   put: (path, options, buffer) ->
     new Promise (resolve, reject) =>
       blobService.createBlockBlobFromText @name, path, buffer, options, (err, result) ->
-        if !err
-          resolve path
-        else
-          reject err
+        return reject err if err
+        resolve path
 
 module.exports = new AzureStorageBlobClient

@@ -16,13 +16,7 @@ class RedisQueueClient
     new RedisQueue KEY_PREFIX + name
 
   clear: () ->
-    new Promise (resolve, reject) ->
-      redis.keys "#{KEY_PREFIX}*", (err, replies) ->
-        return reject err if err
-        return resolve 0 if replies.length == 0
-        redis.del replies, (err, reply) ->
-          return reject err if err
-          resolve reply
+    redis.clear KEY_PREFIX
 
 class RedisQueue
   constructor: (name) ->
@@ -33,7 +27,7 @@ class RedisQueue
       redis.rpop @name, (err, reply) ->
         return reject err if err
         resolve reply
-    .then (message) ->
+    .then (message) =>
       throw new error.NotAvailableError(@name) if !message
       Promise.resolve new RedisQueueMessage @name, message
 

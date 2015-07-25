@@ -16,13 +16,7 @@ class RedisDBClient
     new RedisDBCollection KEY_PREFIX + name
 
   clear: () ->
-    new Promise (resolve, reject) ->
-      redis.keys "#{KEY_PREFIX}*", (err, replies) ->
-        return reject err if err
-        return resolve 0 if replies.length == 0
-        redis.del replies, (err, reply) ->
-          return reject err if err
-          resolve reply
+    redis.clear KEY_PREFIX
 
 class RedisDBCollection
   constructor: (name) ->
@@ -39,9 +33,9 @@ class RedisDBCollection
         redis.hget @name, key, (err, reply) ->
           return reject err if err
           resolve reply
-    .then (entity) ->
-      throw new error.NotFoundError(@name, id) if !entity
-      Promise.resolve JSON.parse entity
+    .then (json) ->
+      throw new error.NotFoundError(@name, id) if !json
+      Promise.resolve JSON.parse json
 
   put: (id, doc) ->
     new Promise (resolve, reject) =>

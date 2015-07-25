@@ -1,8 +1,6 @@
 azure = require 'azure-storage'
-_ = require 'lodash'
 Promise = require 'bluebird'
 
-config = require 'config'
 error = require 'error'
 
 tableService = azure.createTableService()
