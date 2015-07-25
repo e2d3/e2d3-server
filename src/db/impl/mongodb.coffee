@@ -29,7 +29,6 @@ class MongoDBCollection
       .then (db) =>
         db.collection(@name).findOne _id: $regex: new RegExp("^#{id}")
       .then (entity) =>
-        console.log new error.NotFoundError(@name, id)
         throw new error.NotFoundError(@name, id) if !entity
         Promise.resolve entity
 
