@@ -2,7 +2,9 @@ fs = require 'fs'
 request = require 'request-json'
 Promise = require 'bluebird'
 
-cache = require 'cache/backend'
+logger = require 'logger'
+
+redis = require 'util/redis'
 
 e2d3server = require '../../../../package.json'
 
@@ -18,6 +20,8 @@ if process.env.PROXY_DEBUG
 
 GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com'
 ETAG_CACHE_PREFIX = 'github:'
+CHECK_CACHE_PREFIX = 'github-check:'
+CACHE_AGE = 60 * 1000
 
 ###
 # Github API用クライアント
@@ -47,19 +51,18 @@ class GithubJsonClient extends request.JsonClient
   ###
   # 保存されているキャッシュからデータを取得
   ###
-  getFromETagCache: (path, options, callback, parse) ->
-    key = @createKey ETAG_CACHE_PREFIX, path
+  getFromETagCache: (path, options, callback) ->
+    etagKey = @createKey ETAG_CACHE_PREFIX, path
 
-    if typeof options == 'function'
-      [options, callback, parse] = [{}, options, callback]
+    [options, callback] = [{}, options] if typeof options == 'function'
 
-    cache.get key, (err, result) =>
+    redis.get etagKey, (err, reply) =>
       return callback err, null, null if err
 
-      if result
-        return callback err, result, result.body
+      if reply
+        return callback err, reply, reply.body
 
-      @get path, options, callback, parse
+      @get path, options, callback
 
   ###
   # 指定された取得メソッドをETagで変更されているかチェックして取得ようにする
@@ -67,44 +70,57 @@ class GithubJsonClient extends request.JsonClient
   makeCachableUsingEtag: (name) ->
     originalFunction = @[name]
 
-    @[name] = (path, options, callback, parse) =>
-      key = @createKey ETAG_CACHE_PREFIX, path
+    @[name] = (path, options, callback) =>
+      etagKey = @createKey ETAG_CACHE_PREFIX, path
+      checkKey = @createKey CHECK_CACHE_PREFIX, path
 
       # normalize arguments
-      if typeof options == 'function'
-        [options, callback, parse] = [{}, options, callback]
+      [options, callback] = [{}, options] if typeof options == 'function'
 
       # get etag and body from cache
-      cache.get key, (err, result) =>
+      redis.mget etagKey, checkKey, (err, result) =>
         return callback err, null, null if err
 
-        cached = null # cached object
-        if result
-          cached = result
+        cached = if result[0] then JSON.parse result[0] else null
+        checker = if result[1] then JSON.parse result[1] else null
+        now = Date.now()
+
+        if cached
           options.headers ?= {}
-          options.headers['if-none-match'] = result.headers.etag
+          options.headers['if-none-match'] = cached.headers.etag
 
         # override callback
-        proxy = (err, res, body) ->
-          return callback err, res, body if err
-
-          # if not modified
-          if res.statusCode == 304
-            return callback err, res, cached.body
-
+        loader = (err, res, body) ->
+          # if error
+          return callback? err, res, body if err
           # if not ok
-          if res.statusCode != 200
-            return callback err, res, body
+          return callback? err, res, body if res.statusCode != 200 && res.statusCode != 304
 
-          caching =
-            statusCode: res.statusCode
-            headers: res.headers
-            body: body
-          cache.set key, caching, {}, () ->
-            callback err, res, body
+          # if modified
+          if res.statusCode == 200
+            cached =
+              statusCode: res.statusCode
+              headers: res.headers
+              body: body
+            checker =
+              lastChecked: now
+            redis.mset etagKey, JSON.stringify(cached), checkKey, JSON.stringify(checker), (err, reply) ->
+              logger.warn err if err
+          else if res.statusCode == 304
+            checker =
+              lastChecked: now
+            redis.set checkKey, JSON.stringify(checker), (err, reply) ->
+              logger.warn err if err
 
-        originalFunction.call @, path, options, proxy, parse
+          return callback? null, cached, cached.body
 
-github = new GithubJsonClient GITHUB_API_URL, options
+        if cached? && checker?.lastChecked? && now - checker.lastChecked < CACHE_AGE
+          return callback null, cached, cached.body
+        else if cached
+          [originalCallback, callback] = [callback, null]
+          originalFunction.call @, path, options, loader
+          return originalCallback null, cached, cached.body
+        else
+          return originalFunction.call @, path, options, loader
 
-module.exports = github
+module.exports = new GithubJsonClient GITHUB_API_URL, options

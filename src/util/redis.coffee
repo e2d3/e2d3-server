@@ -2,7 +2,11 @@ redis = require 'redis'
 logger = require 'logger'
 Promise = require 'bluebird'
 
-client = redis.createClient()
+host = process.env.REDIS_HOST ? '127.0.0.1'
+port = process.env.REDIS_PORT ? 6379
+options = {}
+
+client = redis.createClient(port, host, options)
 
 client.on 'error', (err) ->
   logger.error 'Error on redis', err
