@@ -1,7 +1,7 @@
 azure = require 'azure-storage'
 Promise = require 'bluebird'
 
-config = require 'config'
+error = require 'error'
 
 blobService = azure.createBlobService()
 
@@ -14,6 +14,10 @@ class AzureStorageBlobClient
 class AzureStorageBlobContainer
   constructor: (name) ->
     @name = name
+
+  get: (path) ->
+    new Promise (resolve, reject) =>
+      throw new error.NotSupportedError @name
 
   put: (path, options, buffer) ->
     new Promise (resolve, reject) =>
