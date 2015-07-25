@@ -1,5 +1,7 @@
 express = require 'express'
 
+logger = require 'logger'
+
 github = require '../../adapters/github'
 
 router = express.Router()
@@ -15,6 +17,7 @@ router.get '/*', (req, res) ->
         res.status(apires.statusCode).end()
       undefined
     .catch (err) ->
+      logger.error 'Error on getting files from GitHub', err
       res.status(500).json err
 
 module.exports = router
