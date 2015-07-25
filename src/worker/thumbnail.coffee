@@ -27,6 +27,7 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
       undefined
     .catch error.NotAvailableError, (err) ->
       logger.info 'Not available'
+      process.exit 0
     .catch (err) ->
       logger.error err
       process.exit 1
@@ -53,10 +54,9 @@ takeScreenShot = (url) ->
 
   new Promise (resolve, reject) ->
     webshot url, options, (err, stream) ->
-      if !err
-        stream.pipe concat (buffer) ->
-          resolve buffer
-      else
-        reject err
+      return reject err if err
+      options = encoding: 'buffer'
+      stream.pipe concat options, (buffer) ->
+        resolve buffer
 
 retrieveRequestFromQueueAndTakeScreenShot()
