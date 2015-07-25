@@ -1,8 +1,6 @@
 azure = require 'azure-storage'
-_ = require 'lodash'
 Promise = require 'bluebird'
 
-config = require 'config'
 error = require 'error'
 
 tableService = azure.createTableService()
@@ -24,25 +22,23 @@ class AzureStorageTableCollection
       tableQuery = new TableQuery()
         .top 1
         .where 'PartitionKey >= ? and PartitionKey < ?', id, id + '~'
+
       tableService.queryEntities @name, tableQuery, null, (err, result) ->
-        if !err
-          entity = result.entries[0]
-          for own key, value of entity
-            entity[key] = value['_']
-          resolve entity
-        else
-          reject err
+        return reject err if err
+        entity = result.entries[0]
+        for own key, value of entity
+          entity[key] = value['_']
+        resolve entity
     .then (entity) =>
-      # queryEntitiesのコールバック内だとErrorが正しくthrowできない
       throw new error.NotFoundError(@name, id) if !entity
       Promise.resolve entity
-
 
   put: (id, doc) ->
     new Promise (resolve, reject) =>
       entity =
         PartitionKey: entGen.String id
         RowKey: entGen.String ''
+
       for own key, value of doc
         switch typeof value
           when 'string' then entity[key] = entGen.String value
@@ -55,9 +51,7 @@ class AzureStorageTableCollection
               entity[key] = entGen.String JSON.stringify value
 
       tableService.insertOrReplaceEntity @name, entity, (err, result) ->
-        if !err
-          resolve result
-        else
-          reject err
+        return reject err if err
+        resolve result
 
 module.exports = new AzureStorageTableClient

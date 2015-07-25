@@ -1,8 +1,6 @@
 azure = require 'azure-storage'
-_ = require 'lodash'
 Promise = require 'bluebird'
 
-config = require 'config'
 error = require 'error'
 
 queueService = azure.createQueueService()
@@ -20,22 +18,17 @@ class AzureStorageQueue
   get: () ->
     new Promise (resolve, reject) =>
       queueService.getMessages @name, (err, result) =>
-        if !err
-          resolve new AzureStorageQueueMessage @name, result[0]
-        else
-          reject err
+        return reject err if !err
+        resolve new AzureStorageQueueMessage @name, result[0]
     .then (message) =>
       throw new error.NotAvailableError(@name) if !message.message
       Promise.resolve message
 
-
   post: (doc) ->
     new Promise (resolve, reject) =>
       queueService.createMessage @name, JSON.stringify(doc), (err, result) ->
-        if !err
-          resolve doc
-        else
-          reject err
+        return reject err if err
+        resolve doc
 
 class AzureStorageQueueMessage
   constructor: (name, message) ->
@@ -48,9 +41,7 @@ class AzureStorageQueueMessage
   delete: () ->
     new Promise (resolve, reject) =>
       queueService.deleteMessage @name, @message.messageid, @message.popreceipt, (err, result) ->
-        if !err
-          resolve result
-        else
-          reject err
+        return reject err if err
+        resolve @message.messagetext
 
 module.exports = new AzureStorageQueueClient

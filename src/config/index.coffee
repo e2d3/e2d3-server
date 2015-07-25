@@ -41,10 +41,11 @@ config =
       dataBase: 'http://sd.e2d3.org:8000/data'
       shareBase: 'http://sd.e2d3.org:8000'
       corsOrigin: 'http://sd.e2d3.org:8000'
-      databaseType: 'mongodb'
-      databaseUrl: 'mongodb://localhost/e2d3'
-      queueType: 'mock'
-      storageType: 'mock'
+      databaseType: 'redis'
+      queueType: 'redis'
+      storageType: 'redis'
+
+config.cacheAgeGitHub = 3 * 60 * 1000 # 3 min
 
 config.isInTest = typeof global.it == 'function'
 if config.isInTest

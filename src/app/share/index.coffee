@@ -1,6 +1,8 @@
 express = require 'express'
 path = require 'path'
-logger = require 'morgan'
+morgan = require 'morgan'
+
+config = require 'config'
 
 app = express()
 
@@ -9,13 +11,14 @@ app.set 'view engine', 'jade'
 
 app.locals.pretty = true
 
-app.use logger 'dev'
+app.use morgan 'dev'
 
-app.use (require 'connect-livereload')() if process.env.NODE_ENV == 'development'
+app.use (require 'connect-livereload')() if config.isInDevelopment
 
 app.use '/libs', express.static path.join __dirname, '..', '..', '..', 'e2d3', 'dist', 'lib'
 
 app.use '/data', require './routes/data'
+app.use '/thumbnails', require './routes/thumbnail'
 app.get '/:chart/:data', require './routes/shares'
 
 module.exports = app
