@@ -40,7 +40,7 @@ class AzureStorageQueueMessage
 
   delete: () ->
     new Promise (resolve, reject) =>
-      queueService.deleteMessage @name, @message.messageid, @message.popreceipt, (err, result) ->
+      queueService.deleteMessage @name, @message.messageid, @message.popreceipt, (err, result) =>
         return reject err if err
         resolve @message.messagetext
 
