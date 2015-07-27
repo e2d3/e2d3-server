@@ -8,11 +8,15 @@ module.exports =
       "#{ret[1]}/#{ret[2]}"
     else if ret = baseUrl.match new RegExp("/github/([^/]+)/([^/]+)/contents/([^/]+)$")
       "#{ret[1]}/#{ret[2]}/#{ret[3]}"
+    else if ret = baseUrl.match new RegExp("/local/([^/]+)$")
+      "local:#{ret[1]}"
     else
       baseUrl
 
   decode: (path) ->
-    if path.indexOf '://' == -1
+    if ret = path.match new RegExp("^local:([^/]+)$")
+      "#{config.fileBase}/local/#{ret[1]}"
+    else if path.indexOf '://' == -1
       splitted = path.split('/')
       switch splitted.length
         when 1 then "#{config.fileBase}/github/e2d3/e2d3-contrib/contents/#{splitted[0]}"
