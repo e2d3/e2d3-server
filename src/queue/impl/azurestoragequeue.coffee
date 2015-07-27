@@ -18,7 +18,7 @@ class AzureStorageQueue
   get: () ->
     new Promise (resolve, reject) =>
       queueService.getMessages @name, (err, result) =>
-        return reject err if !err
+        return reject err if err
         resolve new AzureStorageQueueMessage @name, result[0]
     .then (message) =>
       throw new error.NotAvailableError(@name) if !message.message
@@ -40,7 +40,7 @@ class AzureStorageQueueMessage
 
   delete: () ->
     new Promise (resolve, reject) =>
-      queueService.deleteMessage @name, @message.messageid, @message.popreceipt, (err, result) ->
+      queueService.deleteMessage @name, @message.messageid, @message.popreceipt, (err, result) =>
         return reject err if err
         resolve @message.messagetext
 
