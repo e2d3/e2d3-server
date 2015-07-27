@@ -21,6 +21,8 @@ app.use (require 'connect-livereload')() if config.isInDevelopment
 app.use '/api', require './routes/api'
 app.use '/files', require './routes/files'
 
+app.use '/files/local', express.static path.join __dirname, '..', '..', '..', 'e2d3', 'contrib' if config.isInDevelopment
+
 app.use express.static path.join __dirname, '..', '..', '..', 'e2d3', 'dist'
 
 module.exports = app
