@@ -6,7 +6,7 @@ html
     meta(property='og:title', content=title)
     meta(property='og:type', content='article')
     meta(property='og:url', content=selfUrl)
-    meta(property='og:image', content='https://e2d3api.blob.core.windows.net/thumbnails/'+path)
+    meta(property='og:image', content=thumbnailUrl)
     meta(property='og:site_name', content='E2D3')
     title= title
     base#e2d3-base(href='.')
@@ -14,9 +14,11 @@ html
       html, body, figure {
         width: 100%;
         height: 100%;
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
+        border: 0;
         text-align: center;
+        overflow: hidden;
       }
       #e2d3-chart-area {
         width: 100%;

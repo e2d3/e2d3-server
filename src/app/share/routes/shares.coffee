@@ -23,6 +23,7 @@ module.exports = (req, res) ->
         dataUrl: "#{config.dataBase}/#{req.params.data}"
         scriptType: result.chart.type
         dataType: 'tsv'
+        thumbnailUrl: "#{config.thumbnailBase}/#{path}"
       res.render 'standalone', params
     .catch error.NotFoundError, (err) ->
       res.status(404).json
