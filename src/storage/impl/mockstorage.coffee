@@ -23,6 +23,12 @@ class MockStorageContainer
     @data = data
     @name = name
 
+  exists: (path) ->
+    new Promise (resolve, reject) =>
+      doc = @data[path]
+      throw new error.NotFoundError(@name, path) if !doc
+      resolve path
+
   get: (path) ->
     new Promise (resolve, reject) =>
       doc = @data[path]
