@@ -11,13 +11,18 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
   queue.get()
     .then (message) ->
       chart = message.value()
-      logger.info 'Take screenshot', chart
-      takeScreenShot chart.url
-        .then (buffer) ->
-          logger.info 'Upload screenshot to \'%s\'', chart.path
-          storage.put chart.path, buffer
+      storage.exists chart.path
         .then () ->
+          logger.info 'Already exits', chart
           Promise.resolve message
+        .catch error.NotFoundError, () ->
+          logger.info 'Take screenshot', chart
+          takeScreenShot chart.url
+            .then (buffer) ->
+              logger.info 'Upload screenshot to \'%s\'', chart.path
+              storage.put chart.path, buffer
+            .then () ->
+              Promise.resolve message
     .then (message) ->
       logger.info 'Remove message from queue', message
       message.delete()
@@ -26,7 +31,6 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
       retrieveRequestFromQueueAndTakeScreenShot()
       undefined
     .catch error.NotAvailableError, (err) ->
-      logger.info 'Not available'
       process.exit 0
     .catch (err) ->
       logger.error err

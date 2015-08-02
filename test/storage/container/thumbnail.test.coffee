@@ -18,6 +18,16 @@ describe 'storage/container/thumbnail', () ->
     storage.clear()
       .then () ->
 
+  describe '#exists()', ->
+    it 'should return path if found', () ->
+      thumbnail.put PATH, new Buffer(DATA, 'base64')
+        .then (path) ->
+          thumbnail.exists path
+        .should.become PATH
+
+    it 'should throw NotFoundError if not found', () ->
+      thumbnail.exists('unknown').should.be.rejectedWith error.NotFoundError
+
   describe '#get()', ->
     it 'should return stored data', () ->
       thumbnail.put PATH, new Buffer(DATA, 'base64')
