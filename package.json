@@ -43,6 +43,7 @@
     "lodash": "~3.10.0",
     "main-bower-files": "~2.9.0",
     "merge2": "~0.3.6",
+    "moment": "^2.10.6",
     "morgan": "~1.6.1",
     "redis": "~0.12.1",
     "request-json": "~0.5.3",
