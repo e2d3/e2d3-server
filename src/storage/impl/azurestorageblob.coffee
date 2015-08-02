@@ -15,6 +15,15 @@ class AzureStorageBlobContainer
   constructor: (name) ->
     @name = name
 
+  exists: (path) ->
+    new Promise (resolve, reject) =>
+      blobService.getBlobMetadata @name, path, (err, result) ->
+        return reject err if err
+        resolve path
+    .catch (err) =>
+      throw new error.NotFoundError(@name, path) if err.message == 'NotFound'
+      Promise.reject err
+
   get: (path) ->
     new Promise (resolve, reject) =>
       throw new error.NotSupportedError @name

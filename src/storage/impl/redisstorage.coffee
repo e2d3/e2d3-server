@@ -22,6 +22,14 @@ class RedisStorageContainer
   constructor: (name) ->
     @name = name
 
+  exists: (path) ->
+    new Promise (resolve, reject) =>
+      redis.hexists @name, path, (err, reply) ->
+        resolve reply
+    .then (reply) =>
+      throw new error.NotFoundError(@name, path) if reply == 0
+      Promise.resolve path
+
   get: (path) ->
     new Promise (resolve, reject) =>
       redis.hget @name, path, (err, reply) ->
