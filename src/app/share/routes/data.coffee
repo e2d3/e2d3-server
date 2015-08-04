@@ -3,11 +3,14 @@ express = require 'express'
 error = require 'error'
 logger = require 'logger'
 data = require 'db/collection/data'
+datastorage = require 'storage/container/data'
 
 router = express.Router()
 
 router.get '/:id', (req, res) ->
   data.get req.params.id
+    .then (doc) ->
+      datastorage.get doc.id
     .then (tsv) ->
       res
         .header 'content-type', 'text/plain'
