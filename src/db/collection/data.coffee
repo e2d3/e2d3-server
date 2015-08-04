@@ -7,15 +7,17 @@ data = db.collection 'data'
 
 get = (id) ->
   data.get id
-    .then (item) ->
-      Promise.resolve item.data
 
 put = (tsv) ->
   sha256 = crypto.createHash 'sha256'
   sha256.update tsv
   id = sha256.digest 'hex'
 
-  data.put id, data: tsv, type: 'tsv'
+  doc =
+    id: id
+    type: 'tsv'
+
+  data.put id, doc
     .then () ->
       Promise.resolve id
 

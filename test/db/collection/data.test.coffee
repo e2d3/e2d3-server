@@ -19,13 +19,17 @@ describe 'db/collection/data', () ->
 
   describe '#get()', ->
     it 'should return stored data', () ->
-      data.get(HASH_FOO).should.become 'foo'
+      data.get(HASH_FOO).should.become
+        id: HASH_FOO
+        type: 'tsv'
 
     it 'should throw NotFoundError if not found', () ->
       data.get('unknown').should.be.rejectedWith error.NotFoundError
 
     it 'should work with abbreviated id', () ->
-      data.get(HASH_FOO[0...7]).should.become 'foo'
+      data.get(HASH_FOO[0...7]).should.become
+        id: HASH_FOO
+        type: 'tsv'
 
   describe '#put()', ->
     it 'should return id', () ->

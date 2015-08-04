@@ -26,7 +26,14 @@ class AzureStorageBlobContainer
 
   get: (path) ->
     new Promise (resolve, reject) =>
-      throw new error.NotSupportedError @name
+      blobService.getBlobToText @name, path, (err, result) ->
+        return reject err if err
+        doc =
+          data: result
+        resolve doc
+    .catch (err) =>
+      throw new error.NotFoundError(@name, path) if err.message == 'NotFound'
+      Promise.reject err
 
   put: (path, options, buffer) ->
     new Promise (resolve, reject) =>
