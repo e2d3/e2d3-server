@@ -18,15 +18,23 @@ html
         padding: 0;
         border: 0;
         text-align: center;
-        overflow: hidden;
       }
-      #e2d3-chart-area {
-        width: 100%;
-        height: 100%;
+      #e2d3-chart-area > svg {
+        display: block;
+      }
+      #e2d3-watermark {
+        position: fixed;
+        width: 100px;
+        bottom: 20px;
+        right: 20px;
+        opacity: 0.05;
+        pointer-events: none;
+        z-index: 2147483647;
       }
   body
     figure#e2d3-chart-area
-    script(src='/libs/e2d3.js', data-base-url=baseUrl, data-script-type=scriptType, data-data-url=dataUrl, data-data-type=dataType)
+    script(src='/lib/e2d3.js', data-base-url=baseUrl, data-script-type=scriptType, data-data-url=dataUrl, data-data-type=dataType)
+    img#e2d3-watermark(src='/lib/watermark.svg')
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
