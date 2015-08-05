@@ -10,6 +10,11 @@ storage = require 'storage/container/thumbnail'
 retrieveRequestFromQueueAndTakeScreenShot = () ->
   queue.get()
     .then (message) ->
+      logger.info 'Remove message from queue', message
+      message.delete()
+        .then () ->
+          Promise.resolve message
+    .then (message) ->
       chart = message.value()
       storage.exists chart.path
         .then () ->
@@ -23,9 +28,6 @@ retrieveRequestFromQueueAndTakeScreenShot = () ->
               storage.put chart.path, buffer
             .then () ->
               Promise.resolve message
-    .then (message) ->
-      logger.info 'Remove message from queue', message
-      message.delete()
     .then () ->
       logger.info 'Succeeded & go next'
       retrieveRequestFromQueueAndTakeScreenShot()

@@ -23,6 +23,7 @@ describe 'db/collection/chart', () ->
   describe '#get()', ->
     it 'should return stored data', () ->
       charts.get(HASH_FOO).should.become
+        id: HASH_FOO
         path: 'foo'
         revision: '0000000'
         type: 'js'
@@ -32,6 +33,7 @@ describe 'db/collection/chart', () ->
 
     it 'should work with abbreviated id', () ->
       charts.get(HASH_FOO[0...32]).should.become
+        id: HASH_FOO
         path: 'foo'
         revision: '0000000'
         type: 'js'
