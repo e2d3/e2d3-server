@@ -14,6 +14,7 @@ put = (params) ->
   id = sha256.digest 'hex'
 
   doc =
+    id: id
     path: params.path
     revision: params.revision
     type: params.type
