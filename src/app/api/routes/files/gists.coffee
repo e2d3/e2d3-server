@@ -3,23 +3,26 @@ express = require 'express'
 logger = require 'logger'
 
 headers = require 'util/headers'
-aliases = require 'util/aliases'
 
 github = require 'app/api/adapters/github'
 
 router = express.Router()
 
-router.get '/*', (req, res) ->
-  path = req.params[0]
-  path = aliases path
-
-  github.getAsync "/repos/#{path}"
+router.get '/:id/:name', (req, res) ->
+  github.getAsync "/gists/#{req.params.id}"
     .spread (apires, body) ->
       if apires.statusCode == 200
-        res
-          .type(body.name)
-          .set(headers.cloneValidHeaders(apires.headers))
-          .send(new Buffer(body.content, body.encoding))
+        file = body.files[req.params.name]
+        if file?
+          res
+            .type(file.filename)
+            .set(headers.cloneValidHeaders(apires.headers, file.size))
+            .send(new Buffer(file.content, 'utf8'))
+        else
+          res
+            .status(404)
+            .set(headers.cloneValidHeaders(apires.headers))
+            .send('')
       else
         res
           .status(apires.statusCode)
