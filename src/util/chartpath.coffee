@@ -2,19 +2,19 @@ config = require 'config'
 
 module.exports =
   encode: (baseUrl) ->
-    if ret = baseUrl.match new RegExp("/github/e2d3/e2d3-contrib/contents/([^/]+)$")
+    if ret = baseUrl.match new RegExp('/github/e2d3/e2d3-contrib/contents/([^/]+)$')
       "#{ret[1]}"
-    else if ret = baseUrl.match new RegExp("/github/([^/]+)/([^/]+)/contents$")
+    else if ret = baseUrl.match new RegExp('/github/([^/]+)/([^/]+)/contents$')
       "#{ret[1]}/#{ret[2]}"
-    else if ret = baseUrl.match new RegExp("/github/([^/]+)/([^/]+)/contents/([^/]+)$")
+    else if ret = baseUrl.match new RegExp('/github/([^/]+)/([^/]+)/contents/([^/]+)$')
       "#{ret[1]}/#{ret[2]}/#{ret[3]}"
-    else if ret = baseUrl.match new RegExp("/local/([^/]+)$")
+    else if ret = baseUrl.match new RegExp('/local/([^/]+)$')
       "local:#{ret[1]}"
     else
       baseUrl
 
   decode: (path) ->
-    if ret = path.match new RegExp("^local:([^/]+)$")
+    if ret = path.match new RegExp('^local:([^/]+)$')
       "#{config.fileBase}/local/#{ret[1]}"
     else if path.indexOf '://' == -1
       splitted = path.split('/')
