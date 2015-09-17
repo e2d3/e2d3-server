@@ -76,7 +76,9 @@ gulp.task 'run', ['watch'], () ->
 gulp.task 'default', ['build']
 
 startExpress = () ->
-  server.listen path: 'server.js'
+  server.listen
+    path: 'server.js'
+    delay: 0
 
 lr = null
 startLivereload = () ->
@@ -84,6 +86,6 @@ startLivereload = () ->
   lr.listen 35729
 
 notifyLivereload = (event) ->
-  server.restart (error) ->
+  server.changed (error) ->
     if !error
       lr.changed body: files: ['dummy']
