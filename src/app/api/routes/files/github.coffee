@@ -3,6 +3,7 @@ express = require 'express'
 logger = require 'logger'
 
 headers = require 'util/headers'
+aliases = require 'util/aliases'
 
 github = require '../../adapters/github'
 
@@ -10,6 +11,7 @@ router = express.Router()
 
 router.get '/*', (req, res) ->
   path = req.params[0]
+  path = aliases path
 
   github.getAsync "/repos/#{path}"
     .spread (apires, body) ->
