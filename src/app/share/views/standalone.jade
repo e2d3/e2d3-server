@@ -3,6 +3,7 @@ html
   head
     meta(charset='UTF-8')
     meta(http-equiv='X-UA-Compatible', content='IE=Edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(property='og:title', content=title)
     meta(property='og:type', content='article')
     meta(property='og:url', content=selfUrl)
@@ -34,7 +35,6 @@ html
   body
     figure#e2d3-chart-area
     script(src='/lib/e2d3.js', data-base-url=baseUrl, data-script-type=scriptType, data-data-url=dataUrl, data-data-type=dataType)
-    img#e2d3-watermark(src='/lib/watermark.svg')
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
