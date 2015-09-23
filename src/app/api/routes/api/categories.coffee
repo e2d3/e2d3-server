@@ -18,7 +18,7 @@ loadTags = (result) ->
       ret[name].push key
   ret
 
-createCharts = (result, tags) ->
+createCharts = (path, result, tags) ->
   ret = []
   for name, data of result
     continue if name == '.tags'
@@ -67,10 +67,11 @@ router.get '/github/*', (req, res) ->
       Promise.props promises
     .then (result) ->
       tags = loadTags result['.tags']
-      charts = createCharts result, tags
+      charts = createCharts path, result, tags
       res.json charts: charts
       undefined
     .catch (err) ->
+      console.error err
       res.status(500).json err
 
 module.exports = router
