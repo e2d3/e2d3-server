@@ -1,11 +1,32 @@
 express = require 'express'
 Promise = require 'bluebird'
+yaml = require 'js-yaml'
 
 github = require '../../adapters/github'
 
 router = express.Router()
 
-createData = (path, name, children) ->
+loadTags = (result) ->
+  [apires, body] = result
+
+  tags = yaml.safeLoad new Buffer(body.content, body.encoding).toString()
+
+  ret = {}
+  for own key, value of tags
+    value.forEach (name) ->
+      ret[name] ?= []
+      ret[name].push key
+  ret
+
+createCharts = (result, tags) ->
+  ret = []
+  for name, data of result
+    continue if name == '.tags'
+    [apires, children] = data
+    ret.push createData path, name, tags[name], children
+  ret
+
+createData = (path, name, tags, children) ->
   scriptType = 'js'
   dataType = 'tsv'
 
@@ -18,6 +39,7 @@ createData = (path, name, children) ->
 
   ret =
     title: "#{path}/#{name}"
+    tags: tags ? []
     baseUrl: "/files/github/#{path}/contents/#{name}"
     scriptType: scriptType
     dataType: dataType
@@ -31,19 +53,21 @@ router.get '/github/*', (req, res) ->
     .spread (apires, body) ->
       promises = {}
       if apires.statusCode == 200
+        promises['.tags'] = github.getAsync "/repos/#{path}/contents/tags.yml"
         for dir in body
-          promises[dir.name] = github.getAsync dir.url
+          if dir.type == 'dir'
+            promises[dir.name] = github.getAsync dir.url
       else if apires.statusCode == 304
         # ディレクトリ取得APIの結果が変更無しであれば、
         # 子供も変更がないので保存されているキャッシュから取得する
+        promises['.tags'] = github.getFromETagCacheAsync "/repos/#{path}/contents/tags.yml"
         for dir in body
-          promises[dir.name] = github.getFromETagCacheAsync dir.url
+          if dir.type == 'dir'
+            promises[dir.name] = github.getFromETagCacheAsync dir.url
       Promise.props promises
     .then (result) ->
-      charts = []
-      for name, data of result
-        [apires, children] = data
-        charts.push createData path, name, children
+      tags = loadTags result['.tags']
+      charts = createCharts result, tags
       res.json charts: charts
       undefined
     .catch (err) ->
