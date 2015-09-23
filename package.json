@@ -39,6 +39,7 @@
     "gulp-uglify": "~1.4.1",
     "gulp-util": "~3.0.6",
     "jade": "~1.11.0",
+    "js-yaml": "^3.4.2",
     "latest-version": "~1.0.1",
     "lodash": "~3.10.1",
     "main-bower-files": "~2.9.0",
