@@ -43,6 +43,7 @@
     "latest-version": "~1.0.1",
     "lodash": "~3.10.1",
     "main-bower-files": "~2.9.0",
+    "meow": "^3.3.0",
     "merge2": "~0.3.6",
     "moment": "^2.10.6",
     "morgan": "~1.6.1",
