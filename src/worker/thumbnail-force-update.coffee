@@ -37,7 +37,7 @@ takeScreenShot = (url) ->
     timeout: 20 * 1000
     takeShotOnCallback: true
     errorIfStatusIsNot200: true
-    zoomFactor: 2.0
+    zoomFactor: 1.0
     onResourceReceived: (response) ->
       if (/\/main.css$/.test response.url) && response.stage == 'end'
         window.onmaincssload?()
