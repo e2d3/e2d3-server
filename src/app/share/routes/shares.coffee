@@ -24,7 +24,9 @@ module.exports = (req, res) ->
         scriptType: result.chart.type
         dataType: 'tsv'
         thumbnailUrl: "#{config.thumbnailBase}/#{path}"
-      res.render 'standalone', params
+      res
+        .header 'cache-control', "public, max-age=#{config.cacheAgeStatic/1000}"
+        .render 'standalone', params
     .catch error.NotFoundError, (err) ->
       res.status(404).json
         code: 404

@@ -15,7 +15,7 @@ app.use morgan 'dev'
 
 app.use (require 'connect-livereload')() if config.isInDevelopment
 
-app.use '/lib', express.static path.join __dirname, '..', '..', '..', 'e2d3', 'dist', 'lib'
+app.use '/lib', express.static path.join(__dirname, '..', '..', '..', 'e2d3', 'dist', 'lib'), maxAge: config.cacheAgeStatic
 
 app.use '/data', require './routes/data'
 app.use '/thumbnails', require './routes/thumbnail'

@@ -2,6 +2,7 @@ express = require 'express'
 
 error = require 'error'
 logger = require 'logger'
+config = require 'config'
 data = require 'db/collection/data'
 datastorage = require 'storage/container/data'
 
@@ -14,6 +15,7 @@ router.get '/:id', (req, res) ->
     .then (tsv) ->
       res
         .header 'content-type', 'text/plain'
+        .header 'cache-control', "public, max-age=#{config.cacheAgeStatic/1000}"
         .send tsv
     .catch error.NotFoundError, (err) ->
       res.status(404).json
