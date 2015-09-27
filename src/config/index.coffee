@@ -49,7 +49,8 @@ config =
       queueType: 'redis'
       storageType: 'redis'
 
-config.cacheAgeGitHub = 3 * 60 * 1000 # 3 min
+config.cacheAgeStatic = 10 * 60 * 1000 # 10 min
+config.cacheAgeGitHub = 10 * 60 * 1000 # 10 min
 
 config.isInTest = typeof global.it == 'function'
 if config.isInTest

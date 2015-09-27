@@ -23,6 +23,6 @@ app.use '/files', require './routes/files'
 
 app.use '/files/local', express.static path.join __dirname, '..', '..', '..', 'e2d3', 'contrib' if config.isInDevelopment
 
-app.use express.static path.join __dirname, '..', '..', '..', 'e2d3', 'dist'
+app.use express.static path.join(__dirname, '..', '..', '..', 'e2d3', 'dist'), maxAge: config.cacheAgeStatic
 
 module.exports = app
