@@ -4,7 +4,7 @@ config =
       isInDevelopment: false
       domainApi: 'a.e2d3.org'
       domainShare: 's.e2d3.org'
-      fileBase: 'https://a.e2d3.org/files'
+      apiBase: 'https://a.e2d3.org'
       dataBase: 'https://s.e2d3.org/data'
       shareBase: 'https://s.e2d3.org'
       thumbnailBase: 'https://e2d3api.blob.core.windows.net/thumbnails'
@@ -16,7 +16,7 @@ config =
       isInDevelopment: false
       domainApi: 'as.e2d3.org'
       domainShare: 'ss.e2d3.org'
-      fileBase: 'http://as.e2d3.org/files'
+      apiBase: 'http://as.e2d3.org'
       dataBase: 'http://ss.e2d3.org/data'
       shareBase: 'http://ss.e2d3.org'
       thumbnailBase: 'https://e2d3api.blob.core.windows.net/thumbnails'
@@ -28,7 +28,7 @@ config =
       isInDevelopment: false
       domainApi: 'at.e2d3.org'
       domainShare: 'st.e2d3.org'
-      fileBase: 'http://at.e2d3.org/files'
+      apiBase: 'http://at.e2d3.org'
       dataBase: 'http://st.e2d3.org/data'
       shareBase: 'http://st.e2d3.org'
       thumbnailBase: 'http://st.e2d3.org/thumbnails'
@@ -40,7 +40,7 @@ config =
       isInDevelopment: true
       domainApi: 'ad.e2d3.org'
       domainShare: 'sd.e2d3.org'
-      fileBase: 'http://ad.e2d3.org:8000/files'
+      apiBase: 'http://ad.e2d3.org:8000'
       dataBase: 'http://sd.e2d3.org:8000/data'
       shareBase: 'http://sd.e2d3.org:8000'
       thumbnailBase: 'http://sd.e2d3.org:8000/thumbnails'

@@ -16,7 +16,7 @@ router.post '/', (req, res) ->
   return res.sendStatus 400 if !req.body?
 
   chartinfo =
-    path: chartpath.encode req.body.chart.baseUrl
+    path: req.body.chart.path
     type: req.body.chart.scriptType
 
   promises =
