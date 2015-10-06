@@ -34,7 +34,7 @@ gulp.task 'js', ['clean'], () ->
     .pipe gulp.dest 'dist'
 
 gulp.task 'coffee', ['clean'], () ->
-  gulp.src 'src/**/*.coffee'
+  gulp.src ['src/**/*.coffee', 'e2d3/src/common/**/*.coffee']
     .pipe plumber()
     .pipe sourcemaps.init()
     .pipe coffee()

@@ -19,7 +19,7 @@ module.exports = (req, res) ->
         title: "#{result.chart.path} - E2D3"
         path: path
         selfUrl: "#{config.shareBase}/#{path}"
-        baseUrl: chartpath.decode result.chart.path
+        baseUrl: chartpath.decodeWithBase result.chart.path
         dataUrl: "#{config.dataBase}/#{req.params.data}"
         scriptType: result.chart.type
         dataType: 'tsv'

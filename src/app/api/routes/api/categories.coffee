@@ -40,7 +40,7 @@ createData = (path, name, tags, children) ->
   ret =
     title: "#{path}/#{name}"
     tags: tags ? []
-    baseUrl: "/files/github/#{path}/contents/#{name}"
+    path: "#{name}"
     scriptType: scriptType
     dataType: dataType
 
