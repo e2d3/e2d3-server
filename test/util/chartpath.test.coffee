@@ -22,6 +22,10 @@ describe 'util/chartpath', () ->
       result = chartpath.encode "#{config.apiBase}/files/gists/00000000"
       result.should.equal 'gist:00000000'
 
+    it 'should return delegated contents if it is with "delegate:" schema', () ->
+      result = chartpath.encode 'https://localhost:8443/files/github/e2d3/e2d3-contrib/contents/barchart'
+      result.should.equal 'delegate:barchart'
+
     it 'should return original if it has more than three slashes', () ->
       result = chartpath.encode 'foo/bar/baz/qux'
       result.should.equal 'foo/bar/baz/qux'
@@ -47,6 +51,10 @@ describe 'util/chartpath', () ->
       result = chartpath.decode 'gist:00000000'
       result.should.equal '/files/gists/00000000'
 
+    it 'should return delegated contents if it is with "delegate:" schema', () ->
+      result = chartpath.decode 'delegate:barchart'
+      result.should.equal 'https://localhost:8443/files/github/e2d3/e2d3-contrib/contents/barchart'
+
     it 'should return original if it has more than three slashes', () ->
       result = chartpath.decode 'foo/bar/baz/qux'
       result.should.equal 'foo/bar/baz/qux'
@@ -71,6 +79,10 @@ describe 'util/chartpath', () ->
     it 'should return Gist if it is with "gist:" schema', () ->
       result = chartpath.decodeWithBase 'gist:00000000'
       result.should.equal "#{config.apiBase}/files/gists/00000000"
+
+    it 'should return delegated contents if it is with "delegate:" schema', () ->
+      result = chartpath.decode 'delegate:barchart'
+      result.should.equal 'https://localhost:8443/files/github/e2d3/e2d3-contrib/contents/barchart'
 
     it 'should return original if it has more than three slashes', () ->
       result = chartpath.decodeWithBase 'foo/bar/baz/qux'
