@@ -6,7 +6,7 @@ logger = require 'logger'
 
 charts = require 'db/collection/chart'
 data = require 'db/collection/data'
-chartpath = require 'util/chartpath'
+chartpath = require 'chartpath'
 
 module.exports = (req, res) ->
   promises =

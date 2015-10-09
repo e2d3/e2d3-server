@@ -8,7 +8,7 @@ charts = require 'db/collection/chart'
 data = require 'db/collection/data'
 datastorage = require 'storage/container/data'
 thumbnail = require 'queue/kind/thumbnail'
-chartpath = require 'util/chartpath'
+chartpath = require 'chartpath'
 
 router = express.Router()
 

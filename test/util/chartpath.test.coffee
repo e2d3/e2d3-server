@@ -1,10 +1,10 @@
 config = require 'config'
-chartpath = require 'util/chartpath'
+chartpath = require 'chartpath'
 
 chai = require 'chai'
 chai.should()
 
-describe 'util/chartpath', () ->
+describe 'chartpath', () ->
   describe '#encode()', () ->
     it 'should return directory in "e2d3-contrib" repository on GitHub if it has no slash', () ->
       result = chartpath.encode "#{config.apiBase}/files/github/e2d3/e2d3-contrib/contents/barchart"

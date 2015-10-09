@@ -34,11 +34,12 @@ gulp.task 'js', ['clean'], () ->
     .pipe gulp.dest 'dist'
 
 gulp.task 'coffee', ['clean'], () ->
-  gulp.src ['src/**/*.coffee', 'e2d3/src/common/**/*.coffee']
+  gulp.src ['src/**/*.coffee', 'e2d3/src/scripts/common/**/*.coffee']
     .pipe plumber()
     .pipe sourcemaps.init()
     .pipe coffee()
     .pipe sourcemaps.write()
+    .pipe plumber.stop()
     .pipe gulp.dest 'dist'
 
 gulp.task 'jade', ['clean'], () ->
@@ -62,7 +63,7 @@ gulp.task 'test', ['build'], () ->
         process.exit 1
 
 gulp.task 'watch', ['test'], ->
-  gulp.watch ['src/**/*', 'test/**/*'], ['test']
+  gulp.watch ['src/**/*', 'e2d3/src/scripts/common/**/*', 'test/**/*'], ['test']
   gulp.watch ['dist/**/*', 'e2d3/dist/**/*', 'server.js'], notifyLivereload
 
 gulp.task 'run', ['watch'], () ->
