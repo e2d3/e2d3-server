@@ -27,7 +27,10 @@ class AzureStorageTableCollection
         return reject err if err
         entity = result.entries[0]
         for own key, value of entity
-          entity[key] = value['_']
+          obj = value['_']
+          if typeof obj == 'string' && obj.charAt(0) == '{'
+            obj = JSON.parse obj
+          entity[key] = obj
         resolve entity
     .then (entity) =>
       throw new error.NotFoundError(@name, id) if !entity
