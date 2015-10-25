@@ -5,16 +5,22 @@ error = require 'error'
 logger = require 'logger'
 
 charts = require 'db/collection/chart'
+parameters = require 'db/collection/parameter'
 data = require 'db/collection/data'
 chartpath = require 'chartpath'
 
 module.exports = (req, res) ->
-  promises =
-    chart: charts.get req.params.chart
+  promises = {}
+  promises.chart = charts.get req.params.chart
+  promises.parameter = parameters.get req.params.parameter if req.params.parameter?
 
   Promise.props promises
     .then (result) ->
-      path = "#{req.params.chart}/#{req.params.data}"
+
+      if req.params.parameter?
+        path = "#{req.params.chart}/#{req.params.parameter}/#{req.params.data}"
+      else
+        path = "#{req.params.chart}/#{req.params.data}"
       params =
         title: "#{result.chart.path} - E2D3"
         path: path
@@ -24,6 +30,7 @@ module.exports = (req, res) ->
         scriptType: result.chart.type
         dataType: 'tsv'
         thumbnailUrl: "#{config.thumbnailBase}/#{path}"
+        parameter: JSON.stringify(result.parameter ? {})
       res
         .header 'cache-control', "public, max-age=#{config.cacheAgeStatic/1000}"
         .render 'standalone', params
