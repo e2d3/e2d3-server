@@ -36,6 +36,7 @@ createPublicBlob = (name) ->
 
 createTable 'charts'
 createTable 'data'
+createTable 'parameters'
 createQueue 'thumbnails'
 createPrivateBlob 'data'
 createPublicBlob 'thumbnails'
