@@ -20,5 +20,6 @@ app.use '/lib', express.static path.join(__dirname, '..', '..', '..', 'e2d3', 'd
 app.use '/data', require './routes/data'
 app.use '/thumbnails', require './routes/thumbnail'
 app.get '/:chart/:data', require './routes/shares'
+app.get '/:chart/:parameter/:data', require './routes/shares'
 
 module.exports = app

@@ -11,14 +11,21 @@ chai.should()
 HASH_FOO = 'ac42acf9bd26de2c8c6baee1947306870f8d199b8e2c8ad9974e7529df4f739b'
 HASH_BAR = 'e6650f6fef07220443d66b74a1d2e85399df1c45a6305e15928447e8d2f7580b'
 
+FOO =
+  path: 'foo'
+  revision: '0000000'
+  type: 'js'
+
+BAR =
+  path: 'bar'
+  revision: '0000000'
+  type: 'js'
+
 describe 'db/collection/chart', () ->
   beforeEach () ->
     db.clear()
       .then () ->
-        charts.put
-          path: 'foo'
-          revision: '0000000'
-          type: 'js'
+        charts.put FOO
 
   describe '#get()', ->
     it 'should return stored data', () ->
@@ -40,7 +47,7 @@ describe 'db/collection/chart', () ->
 
   describe '#put()', ->
     it 'should return id', () ->
-      charts.put(path: 'bar', revision: '0000000', type: 'js').should.become HASH_BAR
+      charts.put(BAR).should.become HASH_BAR
 
     it 'should return id if upsert', () ->
-      charts.put(path: 'foo', revision: '0000000', type: 'js').should.become HASH_FOO
+      charts.put(FOO).should.become HASH_FOO
