@@ -1,5 +1,6 @@
 Promise = require 'bluebird'
 
+config = require 'config'
 error = require 'error'
 logger = require 'logger'
 storage = require 'storage/container/thumbnail'
@@ -10,7 +11,7 @@ path = process.argv[3]
 
 chart =
   path: path
-  url: "https://s.e2d3.org/#{path}"
+  url: "#{config.shareBase}/#{path}"
 
 retrieveRequestFromArgumentAndTakeScreenShot = () ->
   logger.info 'Take screenshot', chart
