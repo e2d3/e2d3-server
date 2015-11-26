@@ -1,7 +1,7 @@
 REGEX_E2D3_CONTRIB = '^e2d3/e2d3-contrib/contents/([^/]+)/'
 
 ALIASES = {
-  "multi-series-rader-chart": "multi-series-radar-chart"
+  'multi-series-rader-chart': 'multi-series-radar-chart'
 }
 
 module.exports = (path) ->
