@@ -1,6 +1,8 @@
 REGEX_E2D3_CONTRIB = '^e2d3/e2d3-contrib/contents/([^/]+)/'
 
-ALIASES = {}
+ALIASES = {
+  "multi-series-rader-chart": "multi-series-radar-chart"
+}
 
 module.exports = (path) ->
   match = (new RegExp(REGEX_E2D3_CONTRIB)).exec path
