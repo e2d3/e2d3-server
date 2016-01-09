@@ -37,7 +37,7 @@ class GithubJsonClient extends request.JsonClient
 
     @hostMatch = new RegExp "^#{@host}"
 
-    Promise.promisifyAll @
+    Promise.promisifyAll @, multiArgs: true
 
   ###
   # キャッシュキー生成
