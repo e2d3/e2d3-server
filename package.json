@@ -68,7 +68,7 @@
   "author": "E2D3 Project",
   "license": "E2D3",
   "scripts": {
-    "postinstall": "cd e2d3 && npm install && bower update && cd .. && gulp build --release",
+    "postinstall": "cd e2d3 && npm install && cd .. && gulp build --release",
     "watch": "gulp run",
     "start": "node server.js"
   }
