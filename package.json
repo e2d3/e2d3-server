@@ -51,7 +51,6 @@
     "redis": "~2.4.2",
     "request-json": "~0.5.5",
     "rimraf": "~2.5.0",
-    "slash": "^1.0.0",
     "source-map-support": "~0.4.0",
     "through2": "^2.0.0",
     "tiny-lr": "~0.2.1",
@@ -69,8 +68,7 @@
   "author": "E2D3 Project",
   "license": "E2D3",
   "scripts": {
-    "preinstall": "npm prune",
-    "postinstall": "cd e2d3 && npm prune && npm install && bower prune && bower update && cd .. && gulp build --release",
+    "postinstall": "cd e2d3 && npm install && bower update && cd .. && gulp build --release",
     "watch": "gulp run",
     "start": "node server.js"
   }
