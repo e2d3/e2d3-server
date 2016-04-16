@@ -13,9 +13,9 @@ loadTags = (result) ->
 
   ret = {}
   for own key, value of tags
-    value.forEach (name) ->
+    value.forEach (name, index) ->
       ret[name] ?= []
-      ret[name].push key
+      ret[name].push name: key, order: index
   ret
 
 createCharts = (path, result, tags) ->
