@@ -63,7 +63,7 @@
   },
   "devDependencies": {},
   "engines": {
-    "node": "~5.3.0"
+    "node": "~6.11.0"
   },
   "author": "E2D3 Project",
   "license": "E2D3",
